@@ -2,8 +2,8 @@ import React from 'react';
 
 
 
-const App = () => (
+const main = () => (
     <p>Poop</p>
   );
   
-  export default App;
+  export default main;
