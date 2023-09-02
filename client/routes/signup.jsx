@@ -26,12 +26,15 @@ const Signup = () => {
     const password = data.get('password');
     const email = data.get('email');
     //Send the info to the database
-    const serverResponse = await fetch('localhost:3000/signup', {
+    const serverResponse = await fetch('/user/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, username, password })
-    });
-    const parsedResponse = serverResponse.json();
+    })
+      .catch(err => {
+        console.log(err);
+      });
+    const parsedResponse = await serverResponse.json();
     console.log(parsedResponse);
   };
 
