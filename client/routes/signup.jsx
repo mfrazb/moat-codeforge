@@ -19,14 +19,20 @@ import Typography from '@mui/material/Typography';
 //         --| signup button
 const Signup = () => {
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      email: data.get('email'),
-      password: data.get('password'),
+    const username =  data.get('username');
+    const password = data.get('password');
+    const email = data.get('email');
+    //Send the info to the database
+    const serverResponse = await fetch('localhost:3000/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, username, password })
     });
+    const parsedResponse = serverResponse.json();
+    console.log(parsedResponse);
   };
 
     
@@ -82,7 +88,6 @@ const Signup = () => {
               label="Username"
               name="username"
               autoComplete="username"
-              autoFocus
             />
             <TextField
               margin="normal"
