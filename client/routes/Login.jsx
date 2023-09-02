@@ -25,12 +25,15 @@ const Login = () => {
     const username =  data.get('username');
     const password = data.get('password');
     //Send the info to the database
-    const serverResponse = await fetch('localhost:3000/login', {
+    const serverResponse = await fetch('http://localhost:3000/user/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
-    });
-    const parsedResponse = serverResponse.json();
+    })
+      .catch(err => {
+        console.log(err);
+      });
+    const parsedResponse = await serverResponse.json();
     console.log(parsedResponse);
   };
 
