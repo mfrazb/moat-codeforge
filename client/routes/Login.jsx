@@ -10,7 +10,6 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-//add import MUI material UI
 
 
 //container--| username
@@ -19,13 +18,20 @@ import Typography from '@mui/material/Typography';
 //         --| signup button
 const Login = () => {
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('username'),
-      password: data.get('password'),
+    //Save the username and password values on-click to these variables
+    const username =  data.get('username');
+    const password = data.get('password');
+    //Send the info to the database
+    const serverResponse = await fetch('localhost:3000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
     });
+    const parsedResponse = serverResponse.json();
+    console.log(parsedResponse);
   };
 
     
