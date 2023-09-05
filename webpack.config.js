@@ -39,15 +39,15 @@ module.exports = {
      */
     proxy: {
       '/signup/**': {
-        target: 'http://localhost:3001/',
+        target: 'http://localhost:3000/',
         secure: false,
       },
-      '/login/**': {
-        target: 'http://localhost:3001/',
+      '/user/**': {
+        target: 'http://localhost:3000/',
         secure: false,
       },
       '/styles.css/**': {
-        target: 'http://localhost:3001/',
+        target: 'http://localhost:3000/',
         secure: false,
       },
     },

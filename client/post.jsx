@@ -1,0 +1,1 @@
+//this is sad, this should be where each post component is defined so we can iterate through main.jsx and create posts

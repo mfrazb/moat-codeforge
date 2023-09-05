@@ -1,17 +1,26 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import App from './App';
+import { Provider } from 'react-redux';
+import store from './store';
+import Login from './routes/Login';
+import Main from './routes/Main';
+import Signup from './routes/signup';
 
 // import UserProvider from './UserProvider.js'; Maybe useful for having global state if we need it
+import './styles/styles.css';
 
-render(
-//   <UserProvider>
+
+const root = createRoot(document.getElementById('root'));
+
+root.render(
+  <Provider store={store}>
     <BrowserRouter >
       <Routes>
-        <Route path='/' element={<App />} />
+        <Route path='/' element={<Login />} />
+        <Route path='/register' element={<Signup />} />
+        <Route path='/main' element={<Main />} />
       </Routes>
-    </BrowserRouter>,
-//   </UserProvider>,
-  document.getElementById('root'),
+    </BrowserRouter>
+  </Provider>
 );
