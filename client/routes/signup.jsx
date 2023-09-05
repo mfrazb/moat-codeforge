@@ -9,6 +9,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 //add import MUI material UI
 
@@ -18,6 +19,8 @@ import Typography from '@mui/material/Typography';
 //         --| login button
 //         --| signup button
 const Signup = () => {
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,6 +39,11 @@ const Signup = () => {
       });
     const parsedResponse = await serverResponse.json();
     console.log(parsedResponse);
+    if(serverResponse.status === 200) {
+      return navigate('/');
+    } else {
+      console.log('show an error');
+    };
   };
 
     
