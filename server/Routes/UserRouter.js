@@ -5,7 +5,7 @@ const userController = require('../Controllers/userController');
 const router = express.Router();
 
 router.post('/login', userController.verifyUser, (req, res) => {
-    res.status(200).json({ message: 'Logged In'})
+    res.status(200).json(res.locals.userInfo)
 })
 
 router.post('/signup', userController.uniqueInput, userController.createUser, (req, res) => {

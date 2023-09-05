@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 
 const UserRouter = require('./Routes/UserRouter');
+const PostRouter = require('./Routes/PostRouter');
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,7 +19,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 app.use('/user', UserRouter);
 
-
+app.use('/post', PostRouter);
 
 app.use((req, res) => res.status(404).send('Oops! This is not the right page'));
 
