@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -14,6 +13,7 @@ import Button from '@mui/material/Button'
 import Container from '@mui/material/Container';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Link from '@mui/material/Link';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -22,12 +22,20 @@ import FunctionsIcon from '@mui/icons-material/Functions';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import FilterVintageIcon from '@mui/icons-material/FilterVintage';
+import LogoutIcon from '@mui/icons-material/Logout';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_FILTER, SET_DEFAULTS, TOGGLE_DRAWER } from '../reducers/forgeReducer';
+import { CHANGE_FILTER, TOGGLE_DRAWER, TOGGLE_POST_WINDOW, SET_PAGE, RENDER_TEST } from '../reducers/forgeReducer';
+import { useNavigate } from 'react-router-dom';
 
 const main = () => {
   const drawerWidth = 360;
@@ -76,151 +84,294 @@ const main = () => {
     }),
   );
 
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   
-  //NEED TO FIX THIS
-  let curUser = useSelector(state => state.currentUsername);
-  //Add a fake name is there is no currentUser (for some weird reason)
-  //if(!curUser) curUser = 'John Doe'
-  let curPage = useSelector(state => state.currentPage);
-  //Add a fake name is there is no currentUser (for some weird reason)
-  //if(!curPage) curPage = 'Algorithms'
+  const curUser = useSelector((state) => state.forge.currentUser);
+  const curPage = useSelector((state) => state.forge.currentPage);
+  const filter = useSelector(state => state.forge.filter);
+  const postWindow = useSelector(state => state.forge.newPostWindow);
+  const drawerOpen = useSelector(state => state.forge.drawerOpen);
+  const curPosts = useSelector(state => state.forge.curPosts);
 
+  const renderedPosts = curPosts.map((post, index) => <p><Link href={post.link} key={index}>{post.title}</Link></p>);
+
+  const toggleDrawer = () => {
+    dispatch(TOGGLE_DRAWER());
+  };
 
   const handleChange = (event) => {
     dispatch(CHANGE_FILTER(event.target.value));
   };
 
-  const filter = useSelector(state => state.filter);
+  const handlePostWindow = () => {
+    dispatch(TOGGLE_POST_WINDOW());
+  };
 
-  const defaultTheme = createTheme();
+  const handleNewPost = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const title = data.get('title');
+    const description = data.get('description');
+    const link = data.get('link');
+    const contentType = data.get('content');
+    const request = { title, type: contentType, category: curPage, userId: curUser.id, link, description};
+    console.log(title, description, link, contentType);
+    const serverResponse = await fetch('http://localhost:3000/post/createpost', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request)
+    })
+      .catch(err => {
+        console.log(err);
+      });
+    const parsedResponse = await serverResponse.json();
+    console.log(parsedResponse);
+    dispatch(TOGGLE_POST_WINDOW());
+  };
+
+  const loadPosts = async (event) => {
+    const serverResponse = await fetch('http://localhost:3000/post/getposts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({category: curPage})
+    })
+      .catch(err => {
+        console.log(err);
+      });
+    const parsedResponse = await serverResponse.json();
+    console.log(parsedResponse);
+    dispatch(RENDER_TEST(parsedResponse))
+  }
+
+  React.useEffect(() => {loadPosts()}, [curPage])
+
+  const newPage = (page) => {
+    if(page === curPage) return;
+    dispatch(RENDER_TEST());
+    dispatch(SET_PAGE(page));
+  }
+
+  const handleLogout = () => {
+    navigate('/');
+  }
+
+  const postType = [
+    {
+      value: 'article',
+      label: 'Article',
+    },
+    {
+      value: 'video',
+      label: 'Video',
+    },
+    {
+      value: 'tutorial',
+      label: 'Tutorial',
+    },
+  ];
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <IconButton>
-              <AccountCircleIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h5"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1, ml: 2 }}
-            >
-              {curUser}
-            </Typography>
-            <Typography component="h1" variant="h5" sx={{ flexGrow: 1}}>
-              {curPage}
-            </Typography>
-            <Button variant='contained'>Create New Post</Button>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <Typography component='h1' variant='h3' textAlign='center' sx={{ mt: 5 }}>
-            {`Welcome`}
-          </Typography>
-          <Typography component='h1' variant='h3' textAlign='center'>
-            {`${curUser}`}
-          </Typography>
-          <List component="nav" sx={{ pl: 4, mt: 5 }}>
-          <ListItemButton>
-            <ListItemIcon>
-              <FunctionsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Algorithms" />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemIcon>
-              <FilterVintageIcon />
-            </ListItemIcon>
-            <ListItemText primary="React" />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemIcon>
-              <GridOnIcon />
-            </ListItemIcon>
-            <ListItemText primary="Redux" />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemIcon>
-              <ConstructionIcon />
-            </ListItemIcon>
-            <ListItemText primary="More to come..." />
-          </ListItemButton>
-          </List>
-        </Drawer>
-        <Box
-          component="main"
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="absolute" open={drawerOpen} color='error'>
+        <Toolbar
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            pr: '24px', // keep right padding when drawer closed
           }}
         >
-          <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Filter</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  defaultValue={'Popular'}
-                  value={filter}
-                  label="Filter"
-                  onChange={handleChange}
-                >
-                  <MenuItem value={`Popular`}>Popular</MenuItem>
-                  <MenuItem value={`Recent`}>Recent</MenuItem>
-                  <MenuItem value={`Type`}>Type</MenuItem>
-                </Select>
-              </FormControl>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: '36px',
+              ...(drawerOpen && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <IconButton>
+            <AccountCircleIcon />
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h5"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1, ml: 2 }}
+          >
+            {curUser.name}
+          </Typography>
+          <Typography component="h1" variant="h5" sx={{ flexGrow: 1}}>
+            {curPage}
+          </Typography>
+          <Button variant='contained' onClick={handlePostWindow} color='error'>Create New Post</Button>
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" open={drawerOpen}>
+        <Toolbar
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            px: [1],
+          }}
+        >
+          <IconButton onClick={toggleDrawer}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </Toolbar>
+        <Divider />
+        <Typography component='h1' variant='h3' textAlign='center' sx={{ mt: 5 }}>
+          {`Welcome`}
+        </Typography>
+        <Typography component='h1' variant='h3' textAlign='center'>
+          {`${curUser.name}`}
+        </Typography>
+        <List component="nav" sx={{ pl: 4, mt: 5, height: 1, justifyContent: 'start', display: 'flex', flexDirection: 'column'}}>
+        <ListItemButton onClick={() => newPage('Algorithms')} sx={{maxHeight: 75}}>
+          <ListItemIcon>
+            <FunctionsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Algorithms" />
+        </ListItemButton>
+        <ListItemButton onClick={() => newPage('React')} sx={{maxHeight: 75}}>
+          <ListItemIcon>
+            <FilterVintageIcon />
+          </ListItemIcon>
+          <ListItemText primary="React" />
+        </ListItemButton>
+        <ListItemButton onClick={() => newPage('Redux')} sx={{maxHeight: 75}}>
+          <ListItemIcon>
+            <GridOnIcon />
+          </ListItemIcon>
+          <ListItemText primary="Redux" />
+        </ListItemButton>
+        <ListItemButton sx={{maxHeight: 75}}>
+          <ListItemIcon>
+            <ConstructionIcon />
+          </ListItemIcon>
+          <ListItemText primary="More to come..." />
+        </ListItemButton>
+        <ListItemButton sx={{ maxHeight: 75, marginTop: 'auto' }}>
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary="Log Out" onClick={handleLogout}/>
+        </ListItemButton>
+        </List>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+          flexGrow: 1,
+          height: '100vh',
+          overflow: 'auto',
+        }}
+      >
+        <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                defaultValue={'Popular'}
+                value={filter}
+                label="Filter"
+                onChange={handleChange}
+              >
+                <MenuItem value={`Popular`}>Popular</MenuItem>
+                <MenuItem value={`Recent`}>Recent</MenuItem>
+                <MenuItem value={`Type`}>Type</MenuItem>
+              </Select>
+            </FormControl>
+            <div>
+              <Dialog open={postWindow} onClose={handlePostWindow}>
+                <DialogTitle>Create New Post</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please enter in the following information regarding your new post:
+                  </DialogContentText>
+                  <Box component='form' onSubmit={handleNewPost}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="title"
+                      name="title"
+                      label="Title"
+                      type="text"
+                      fullWidth
+                      required
+                      variant="standard"
+                    />
+                    <TextField
+                      autoFocus
+                      required
+                      margin="dense"
+                      id="description"
+                      name="description"
+                      label="Description"
+                      type="text"
+                      fullWidth
+                      minRows={3}
+                      multiline
+                      variant="standard"
+                    />
+                    <TextField
+                      autoFocus
+                      required
+                      margin="dense"
+                      id="link"
+                      name="link"
+                      label="Link"
+                      type="url"
+                      fullWidth
+                      variant="standard"
+                    />
+                    <TextField
+                      autoFocus
+                      required
+                      margin="dense"
+                      id="content"
+                      name="content"
+                      label="Content Type"
+                      type="url"
+                      fullWidth
+                      defaultValue={"article"}
+                      select
+                      helperText="Please select the type of content"
+                      variant="standard"
+                    >
+                      {postType.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <DialogActions>
+                      <Button onClick={handlePostWindow}>Cancel</Button>
+                      <Button type='submit'>Submit Post</Button>
+                    </DialogActions>
+                  </Box>
+                </DialogContent>
+              </Dialog>
+            </div>
+            <Box sx={{ mt: 5 }}>
+              {renderedPosts}
             </Box>
-          </Container>
-        </Box>
+          </Box>
+        </Container>
       </Box>
-    </ThemeProvider>
+    </Box>
   )
 };
   
@@ -228,5 +379,5 @@ const main = () => {
   - import TrendingUpTwoToneIcon from '@mui/icons-material/TrendingUpTwoTone';
 */
 
-
+//create post -> get post -> upvotes
 export default main;

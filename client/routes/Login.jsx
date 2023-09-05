@@ -9,6 +9,9 @@ import LoginIcon from '@mui/icons-material/Login';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+import { SET_USER } from '../reducers/forgeReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -17,6 +20,9 @@ import Typography from '@mui/material/Typography';
 //         --| login button
 //         --| signup button
 const Login = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,6 +41,12 @@ const Login = () => {
       });
     const parsedResponse = await serverResponse.json();
     console.log(parsedResponse);
+    if(serverResponse.status === 200) {
+      dispatch(SET_USER(parsedResponse));
+      return navigate('/main');
+    } else {
+      console.log('show an error');
+    };
   };
 
     
