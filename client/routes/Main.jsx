@@ -61,43 +61,29 @@ import { useNavigate } from 'react-router-dom';
 const main = () => {
   const drawerWidth = 360;
 
-  // make separate component
-  // const Drawer = styled(MuiDrawer, {
-  //   shouldForwardProp: prop => prop !== 'open',
-  // })(({ theme, open }) => ({
-  //   '& .MuiDrawer-paper': {
-  //     position: 'relative',
-  //     whiteSpace: 'nowrap',
-  //     width: drawerWidth,
-  //     transition: theme.transitions.create('width', {
-  //       easing: theme.transitions.easing.sharp,
-  //       duration: theme.transitions.duration.enteringScreen,
-  //     }),
-  //     boxSizing: 'border-box',
-  //     ...(!open && {
-  //       overflowX: 'hidden',
-  //       transition: theme.transitions.create('width', {
-  //         easing: theme.transitions.easing.sharp,
-  //         duration: theme.transitions.duration.leavingScreen,
-  //       }),
-  //       width: theme.spacing(7),
-  //       [theme.breakpoints.up('sm')]: {
-  //         width: 0,
-  //       },
-  //     }),
-  //   },
-  // }));
-
+  // REACT HOOKS
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // get state from store
+  // STATE HOOKS
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
   const filter = useSelector(state => state.forge.filter);
   const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
   const curPosts = useSelector(state => state.forge.curPosts);
+
+  // HANDLERS
+
+  // open and close CREATE NEW POST window
+  const handlePostWindow = () => {
+    dispatch(TOGGLE_POST_WINDOW());
+  };
+
+  // open and close left drawer
+  const toggleDrawer = () => {
+    dispatch(TOGGLE_DRAWER());
+  };
 
   // container for React post components
   // can leave here if main continues to be container for posts
@@ -109,18 +95,11 @@ const main = () => {
     </p>
   ));
 
-  const toggleDrawer = () => {
-    dispatch(TOGGLE_DRAWER());
-  };
-
   const handleChange = event => {
     dispatch(CHANGE_FILTER(event.target.value));
   };
 
   // separate into post component
-  const handlePostWindow = () => {
-    dispatch(TOGGLE_POST_WINDOW());
-  };
 
   const handleNewPost = async event => {
     event.preventDefault();
@@ -173,15 +152,14 @@ const main = () => {
     loadPosts();
   }, [curPage]);
 
-  //
+  // MOVED TO DRAWER
   const newPage = page => {
     if (page === curPage) return;
     dispatch(RENDER_TEST());
     dispatch(SET_PAGE(page));
   };
 
-  // navigate back to log in page
-  // could address sessions later on
+  // MOVED TO DRAWER
   const handleLogout = () => {
     navigate('/');
   };

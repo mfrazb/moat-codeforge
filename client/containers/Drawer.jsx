@@ -30,4 +30,18 @@ const DrawerCF = styled(Drawer, {
   },
 }));
 
+// SELECT CATEGORY - set posts to new category
+// TO DO - rename to selectCategory?
+const newPage = page => {
+  if (page === curPage) return;
+  dispatch(RENDER_TEST());
+  dispatch(SET_PAGE(page));
+};
+
+// LOGOUT -  redirect to login page
+// TO DO - address sessions in handler
+const handleLogout = () => {
+  navigate('/');
+};
+
 export default DrawerCF;
