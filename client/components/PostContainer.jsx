@@ -13,53 +13,60 @@ const PostContainer = () => {
     dispatch(CHANGE_FILTER(event.target.value));
   };
   // Fetch post data from database // old with post request...
+  // const getPostData = async () => {
+  //   const serverResponse = await fetch("http://localhost:3000/post/getposts", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ category: curPage }),
+  //   }).catch((err) => {
+  //     console.log(err);
+  //   });
+  //   const parsedResponse = await serverResponse.json();
+  //   parsedResponse.sort((a,b) => {
+  //     if (filter === 'Popular'){
+  //       return (b.upvotes - a.upvotes)
+  //   }
+  //   else if (filter === 'Recent')    {
+  //       return (b.date_submitted - a.date_submitted)
+  //   }
+  //   else {
+  //     if(a.type[0] < b.type[0]) { return -1; }
+  //     if(a.type[0] > b.type[0]) { return 1; }
+  //     return 0;
+  //   }
+  //   })
+  //   dispatch(RENDER_TEST(parsedResponse));
+  // };
   const getPostData = async () => {
-    const serverResponse = await fetch("http://localhost:3000/post/getposts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category: curPage }),
-    }).catch((err) => {
+    const serverResponse = await fetch(
+      "http://localhost:3000/post/getposts"
+    ).catch((err) => {
       console.log(err);
     });
     const parsedResponse = await serverResponse.json();
-    parsedResponse.sort((a,b) => {
-      if (filter === 'Popular'){
-        return (b.upvotes - a.upvotes)
-    }
-    else if (filter === 'Recent')    {
-        return (b.date_submitted - a.date_submitted)
-    }
-    else {
-      if(a.type[0] < b.type[0]) { return -1; }
-      if(a.type[0] > b.type[0]) { return 1; }
-      return 0;
-    }
-    })
-    dispatch(RENDER_TEST(parsedResponse));
+    const filteredResponse = parsedResponse.filter((post) => post.category === curPage);
+    filteredResponse.sort((a, b) => {
+      if (filter === "Popular") {
+        return b.upvotes - a.upvotes;
+      } else if (filter === "Recent") {
+        return b.date_submitted - a.date_submitted;
+      } else {
+        if (a.type[0] < b.type[0]) {
+          return -1;
+        }
+        if (a.type[0] > b.type[0]) {
+          return 1;
+        }
+        return 0;
+      }
+    });
+    dispatch(RENDER_TEST(filteredResponse));
   };
-  // Leaving this commented for when get request is there
-  //   const getPostData = async () => {
-  //     const serverResponse = await fetch('http://localhost:3000/post/getposts').catch(err => {
-  //       console.log(err);
-  //     });
-  //     const parsedResponse = await serverResponse.json().filter((post) => post.content_type === curPage);
-  //     console.log(parsedResponse);
-  //     dispatch(RENDER_TEST(parsedResponse));
-  //   };
-  // load posts when curPage state changes
 
-
-  // filter change sorts array of posts
-//
-
-//     // if filter is popular, sort by upvotes
-
-
-React.useEffect(() => {
-  getPostData();
-}, [curPage, filter]);
-console.log("These are the Posts: ", Posts);
-console.log("This is the filter: ", filter)
+  React.useEffect(() => {
+    getPostData();
+  }, [curPage, filter]);
+  console.log(Posts)
   const postArr = [];
   Posts.forEach((post, index) => {
     postArr.push(

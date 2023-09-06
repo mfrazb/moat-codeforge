@@ -8,7 +8,7 @@ router.post('/createpost', postController.createPost, (req, res) => {
     res.status(200).json({ message: 'Created post!'})
 })
 
-router.post('/getposts', postController.getPosts, (req, res) => {
+router.get('/getposts', postController.getPosts, (req, res) => {
     res.status(200).json(res.locals.allPosts)
 })
 // route middleware still needs work
