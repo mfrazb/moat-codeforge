@@ -2,10 +2,14 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 
 // use deconstruction to import components from @mui/material
+
+// Import components
+import AppBar from './../containers/AppBar';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
+
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -48,25 +52,6 @@ import { useNavigate } from 'react-router-dom';
 
 const main = () => {
   const drawerWidth = 360;
-
-  // make separate component
-  const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: prop => prop !== 'open',
-  })(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
 
   // make separate component
   const Drawer = styled(MuiDrawer, {
@@ -215,7 +200,11 @@ const main = () => {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       {/* check HTML - if all one unit, separate to another component */}
-      <AppBar position='absolute' open={drawerOpen} color='error'>
+      <AppBar
+        position='absolute'
+        open={drawerOpen}
+        color='error'
+        drawerWidth={drawerWidth}>
         <Toolbar
           sx={{
             pr: '24px', // keep right padding when drawer closed
@@ -351,7 +340,7 @@ const main = () => {
               </Select>
             </FormControl>
             <div>
-              {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed */}
+              {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed, need to allow user to not add https AND to specify category */}
               <Dialog open={postWindow} onClose={handlePostWindow}>
                 <DialogTitle>Create New Post</DialogTitle>
                 <DialogContent>
