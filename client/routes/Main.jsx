@@ -6,9 +6,11 @@ import { styled } from '@mui/material/styles';
 
 // use deconstruction to import components from @mui/material
 
+// Import containers
+import AppBarContainer from '../containers/AppBarContainer.jsx';
 // Import components
-import AppBar from './../containers/AppBar.jsx';
-import Drawer from './../containers/Drawer.jsx';
+import AppBar from '../components/AppBar.jsx';
+import Drawer from '../containers/DrawerContainer.jsx';
 
 // App Bar subcomponents
 import Toolbar from '@mui/material/Toolbar';
@@ -66,15 +68,17 @@ const main = () => {
   const navigate = useNavigate();
 
   // STATE HOOKS
-  // MOVED TO DRAWER
+  // MOVE TO DRAWER CONTAINER
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
 
+  // MOVE TO POSTS CONTAINER
   const filter = useSelector(state => state.forge.filter);
-  const postWindow = useSelector(state => state.forge.newPostWindow);
-
   const curPosts = useSelector(state => state.forge.curPosts);
+
+  // MOVE TO APPBAR CONTAINER?
+  const postWindow = useSelector(state => state.forge.newPostWindow);
 
   // HANDLERS
 
@@ -189,46 +193,14 @@ const main = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      {/* check HTML - if all one unit, separate to another component */}
-      <AppBar
-        position='absolute'
-        open={drawerOpen}
-        color='error'
-        drawerWidth={drawerWidth}>
-        <Toolbar
-          sx={{
-            pr: '24px', // keep right padding when drawer closed
-          }}>
-          <IconButton
-            edge='start'
-            color='inherit'
-            aria-label='open drawer'
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: '36px',
-              ...(drawerOpen && { display: 'none' }),
-            }}>
-            <MenuIcon />
-          </IconButton>
-          <IconButton>
-            <AccountCircleIcon />
-          </IconButton>
-          <Typography
-            component='h1'
-            variant='h5'
-            color='inherit'
-            noWrap
-            sx={{ flexGrow: 1, ml: 2 }}>
-            {curUser.name}
-          </Typography>
-          <Typography component='h1' variant='h5' sx={{ flexGrow: 1 }}>
-            {curPage}
-          </Typography>
-          <Button variant='contained' onClick={handlePostWindow} color='error'>
-            Create New Post
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <AppBarContainer
+        drawerOpen={drawerOpen}
+        drawerWidth={drawerWidth}
+        curPage={curPage}
+        curUser={curUser}
+        toggleDrawer={toggleDrawer}
+        handlePostWindow={handlePostWindow}
+      />
       {/* side bar - break into another component */}
       <Drawer variant='permanent' open={drawerOpen} drawerWidth={drawerWidth}>
         <Toolbar
