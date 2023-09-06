@@ -7,14 +7,6 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     //add more tabs at a later point as necessary
     currentPosts: [{ //need to add postID; needs to increment every time new one gets generated
-      // TODO: Delete the code commented out? => Previous initial state
-      // title: 'Algos', 
-      // content_Type: 'Article', 
-      // poster: 'username',
-      // link: 'url',
-      // description: 'insert description here',
-      // date: 0,//date goes here,
-      // upvotes: 0  
       title: '',
       content_type: '',
       poster: '',
@@ -27,7 +19,7 @@ const initialState = {
     filter: 'Popular',
     loggedIn: false,
     newPostWindow: false,
-    currentUser: {name: 'John Doe', id: 0},
+    currentUser: {name: '', id: 0},
     currentPage: 'Algorithms',
 };
 
