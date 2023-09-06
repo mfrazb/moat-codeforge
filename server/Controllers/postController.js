@@ -7,16 +7,18 @@ const postController = {};
 // Takes post request properties and sets up postgres query
 postController.createPost = async (req, res, next) => {
     try {
-        // destructuring the below categories from request body
+        // deconstruction from req.body pulling the below properties
         const { title, type, category, userId, link, description } = req.body;
+        // creating a variable to use for the postgres DB query
         const createPostQuery = `INSERT INTO posts (user_id, title, link, description, category, type) VALUES ($1, $2, $3, $4, $5, $6);`;
-        // creating paramaters to later be used in db Query
+        // db.query method pulls below parameters from DB and inserts them into posts
         const params = [userId, title, link, description, category, type];
         // use query method to extract desired fields from DB
         db.query(createPostQuery, params);
         return next();
     // if there is an error log and return string back to 
     } catch(err) {
+        // if the parameters don't exist or there is an error 
         return next({
             log: `postController.createPost: Error ${err}`,
             message: { err: 'Error occurred in postController.createPost'}

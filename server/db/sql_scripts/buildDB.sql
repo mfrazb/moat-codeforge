@@ -17,7 +17,7 @@ CREATE TABLE user_sessions (
 
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
-    user_id bigint NOT NULL REFERENCES users(id), -- assuming your users table is named "users"
+    user_id bigint REFERENCES users(id), -- assuming your users table is named "users"
     upvotes INTEGER DEFAULT 0,
     title TEXT NOT NULL,
     link TEXT NOT NULL UNIQUE,
