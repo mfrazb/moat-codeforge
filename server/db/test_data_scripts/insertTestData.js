@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 // Should move this to separate file, .env perhaps?
-const SALT_ROUNDS = process.env.SALTROUNDS;
+const SALT_ROUNDS = Number(process.env.SALTROUNDS);
 
 // Setup test data for users
 const text = `
@@ -31,10 +31,10 @@ INSERT INTO posts(user_id, title, link, description, category, type)
 VALUES %L;`
 
 const postsValues = [
-    ['1', 'JavaScript Algorithms and Data Structures tutorial from FreeCodeCamp', 'https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/', 'A step by step tutorial on algorithms and data structures.', 'algorithms', 'tutorial'],
-    ['1', 'JavaScript Algorithms and Data Structures tutorial from FreeCodeCamp', 'https://www.youtube.com/watch?v=hQAHSlTtcmY', 'A 30 minute YouTube video on React.', 'react', 'video'],
-    ['1', 'Test', 'https://mui.com/material-ui/react-text-field/', 'Help learning react, it\'s a pain', 'algorithms', 'article'],
-    ['2', 'Learn React', 'https://mui.com/material-ui/react-dialog/', 'Help learning react, it\'s a pain', 'algorithms', 'article'],
+    ['1', 'JavaScript Algorithms and Data Structures tutorial from FreeCodeCamp', 'https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/', 'A step by step tutorial on algorithms and data structures.', 'Algorithms', 'tutorial'],
+    ['1', 'JavaScript Algorithms and Data Structures tutorial from FreeCodeCamp', 'https://www.youtube.com/watch?v=hQAHSlTtcmY', 'A 30 minute YouTube video on React.', 'React', 'video'],
+    ['1', 'Test', 'https://mui.com/material-ui/react-text-field/', 'Help learning react, it\'s a pain', 'Algorithms', 'article'],
+    ['2', 'Learn React', 'https://mui.com/material-ui/react-dialog/', 'Help learning react, it\'s a pain', 'Algorithms', 'article'],
 ]
 
 // Define async function for inserting data
