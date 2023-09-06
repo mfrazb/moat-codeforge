@@ -1,7 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Box, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
 import { RENDER_TEST, CHANGE_FILTER } from "../reducers/forgeReducer";
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 
 const PostContainer = () => {
   const dispatch = useDispatch();
@@ -12,31 +14,6 @@ const PostContainer = () => {
   const handleChange = (event) => {
     dispatch(CHANGE_FILTER(event.target.value));
   };
-  // Fetch post data from database // old with post request...
-  // const getPostData = async () => {
-  //   const serverResponse = await fetch("http://localhost:3000/post/getposts", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ category: curPage }),
-  //   }).catch((err) => {
-  //     console.log(err);
-  //   });
-  //   const parsedResponse = await serverResponse.json();
-  //   parsedResponse.sort((a,b) => {
-  //     if (filter === 'Popular'){
-  //       return (b.upvotes - a.upvotes)
-  //   }
-  //   else if (filter === 'Recent')    {
-  //       return (b.date_submitted - a.date_submitted)
-  //   }
-  //   else {
-  //     if(a.type[0] < b.type[0]) { return -1; }
-  //     if(a.type[0] > b.type[0]) { return 1; }
-  //     return 0;
-  //   }
-  //   })
-  //   dispatch(RENDER_TEST(parsedResponse));
-  // };
   const getPostData = async () => {
     const serverResponse = await fetch(
       "http://localhost:3000/post/getposts"
@@ -62,29 +39,62 @@ const PostContainer = () => {
     });
     dispatch(RENDER_TEST(filteredResponse));
   };
+  const handleThumbsUp = async (event) => {
+    console.log(event.target.value)
+    const serverResponse = await fetch(
+      'http://localhost:3000/post/vote',
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({vote: 'up', link: event.target.value}),
+      },
+    ).catch(err => {
+      console.log(err);
+    });
+    getPostData();
+  };
+  const handleThumbsDown = async (event) => {
+    console.log(event.target.value)
+    const serverResponse = await fetch(
+      'http://localhost:3000/post/vote',
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({vote: 'down', link: event.target.value}),
+      },
+    ).catch(err => {
+      console.log(err);
+    });
+    getPostData();
+  };
+
+
+
+
+
+
 
   React.useEffect(() => {
     getPostData();
   }, [curPage, filter]);
-  console.log(Posts)
+
   const postArr = [];
   Posts.forEach((post, index) => {
+    let date = new Date(post.date_submitted);
     postArr.push(
-      <div key={index} style={{ border: "1px solid black", padding: "5px" }}>
-        {/* currently looking at user_id, may have to fetch which user created which post usign a get request */}
-        <label>Created by: </label>
-        <p>{post.user_id}</p>
-        <br></br>
+      <div key={index} style={{ border: "1px solid black", padding: "5px", display: 'flex', flexDirection: 'column' }}>
         <strong>{post.title}</strong>
-        <br></br>
+        <label>User {post.user_id} posted this on {date.toUTCString()}</label>
         <p>{post.description}</p>
         <br></br>
-        <a href={post.link}>Link</a>
+        <a href={post.link}>Link: {`${post.link}`}</a>
         <br></br>
-        <label>Made at: </label>
-        <p>{post.date_submitted}</p>
-        <label>Upvotes: </label>
-        <p>{post.upvotes}</p>
+        <div style={{display:'flex', flexDirection: 'column', alignSelf:'center'}}>
+        <label>{post.upvotes} people upvoted this. </label>
+        <Button variant="outlined" value={post.link} startIcon={<ThumbUpOutlinedIcon />} style={{border:'1px solid red', color:'red', width:'200px'}} onClick={handleThumbsUp}>Upvote This!</Button>
+        <Button variant="outlined" value={post.link} startIcon={<ThumbDownOffAltIcon />} style={{border:'1px solid red', color:'red' , width:'200px'}} onClick={handleThumbsDown}>Downvote This!</Button> 
+        </div>
+    
       </div>
     );
   });
