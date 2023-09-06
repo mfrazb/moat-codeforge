@@ -9,7 +9,7 @@ postController.createPost = async (req, res, next) => {
         const { title, type, category, userId, link, description } = req.body;
         const createPostQuery = `INSERT INTO posts (user_id, title, link, description, category, type) VALUES ($1, $2, $3, $4, $5, $6);`;
         const params = [userId, title, link, description, category, type];
-        db.query(createPostQuery, params);
+        await db.query(createPostQuery, params);
         return next();
     } catch(err) {
         return next({
