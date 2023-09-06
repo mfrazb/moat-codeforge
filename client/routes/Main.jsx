@@ -8,54 +8,49 @@ import { styled } from '@mui/material/styles';
 
 // Import containers
 import AppBarContainer from '../containers/AppBarContainer.jsx';
-import DrawerContainer from '../containers/DrawerContainer.jsx';
-
 // Import components
-import Drawer from '../components/Drawer.jsx';
-import PostCreator from '../components/PostCreator.jsx';
+import AppBar from '../components/AppBar.jsx';
+import Drawer from '../containers/DrawerContainer.jsx';
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-
-// shared subcomponents
+// App Bar subcomponents
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+
+// shared subcomponents
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 
-// import MuiDrawer from '@mui/material/Drawer';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MuiDrawer from '@mui/material/Drawer';
+import Box from '@mui/material/Box';
 
-// drawer subcomponents
 import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+
+import Container from '@mui/material/Container';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Link from '@mui/material/Link';
 import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import FunctionsIcon from '@mui/icons-material/Functions';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import FilterVintageIcon from '@mui/icons-material/FilterVintage';
 import LogoutIcon from '@mui/icons-material/Logout';
-import FunctionsIcon from '@mui/icons-material/Functions';
-
 import InputLabel from '@mui/material/InputLabel';
-
+import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import MenuItem from '@mui/material/MenuItem';
 
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
   CHANGE_FILTER,
   TOGGLE_DRAWER,
@@ -86,13 +81,11 @@ const main = () => {
 
   // HANDLERS
 
-  // MOVE TO APPBAR CONTAINER ?
   // open and close CREATE NEW POST window
   const handlePostWindow = () => {
     dispatch(TOGGLE_POST_WINDOW());
   };
 
-  // MOVE TO DRAWER CONTAINER
   // open and close left drawer
   const toggleDrawer = () => {
     dispatch(TOGGLE_DRAWER());
@@ -114,7 +107,7 @@ const main = () => {
       link,
       description,
     };
-    console.log(title, contentType, curPage, curUser.id, description, link);
+    console.log(title, description, link, contentType);
     const serverResponse = await fetch(
       'http://localhost:3000/post/createpost',
       {
@@ -144,22 +137,20 @@ const main = () => {
   // move to create new post component
   // populates dropdown
   // separate out logic - options file that specifies different filters
-
-  // MOVE TO POSTCREATOR
-  // const postType = [
-  //   {
-  //     value: 'article',
-  //     label: 'Article',
-  //   },
-  //   {
-  //     value: 'video',
-  //     label: 'Video',
-  //   },
-  //   {
-  //     value: 'tutorial',
-  //     label: 'Tutorial',
-  //   },
-  // ];
+  const postType = [
+    {
+      value: 'article',
+      label: 'Article',
+    },
+    {
+      value: 'video',
+      label: 'Video',
+    },
+    {
+      value: 'tutorial',
+      label: 'Tutorial',
+    },
+  ];
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -173,21 +164,7 @@ const main = () => {
         handlePostWindow={handlePostWindow}
       />
       {/* side bar - break into another component */}
-      {/*}
-      <Drawer
-        drawerOpen={drawerOpen} //
-        drawerWidth={drawerWidth} //
-        curUser={curUser}
-        curPage={curPage}
-        toggleDrawer={toggleDrawer}
-        newPage={newPage}
-        handleLogout={handleLogout}
-      />
-      */}
-      <Drawer
-        variant='permanent'
-        drawerOpen={drawerOpen}
-        drawerWidth={drawerWidth}>
+      <Drawer variant='permanent' open={drawerOpen} drawerWidth={drawerWidth}>
         <Toolbar
           sx={{
             display: 'flex',
