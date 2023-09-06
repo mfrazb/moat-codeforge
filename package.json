@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production concurrently \"node server/server.js\" \"./server/db/sessionScheduler.sh\"",
+    "start": "NODE_ENV=production concurrently \"node server/server.js\" ",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development concurrently \"webpack serve --open\" \"nodemon server/server.js\" \"./server/db/sessionScheduler.sh\"",
+    "dev": "NODE_ENV=development concurrently \"webpack serve --open\" \"nodemon server/server.js\" ",
     "build_sql_tests": "./server/db/buildDB_wTests.sh"
   },
   "author": "CodeforgeLLC",
@@ -21,6 +21,7 @@
     "@mui/icons-material": "^5.14.7",
     "@mui/material": "^5.14.7",
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/jest": "^29.5.4",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "d3": "^3.5.17",
