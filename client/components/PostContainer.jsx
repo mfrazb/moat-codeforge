@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
-import {RENDER_TEST} from '../reducers/forgeReducer';
+import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {RENDER_TEST, CHANGE_FILTER} from '../reducers/forgeReducer';
 
 const PostContainer = () =>{
     const dispatch = useDispatch();
@@ -35,6 +35,11 @@ const PostContainer = () =>{
       }, [curPage]);
     console.log('These are the Posts: ', Posts)
 
+
+    const filter = useSelector(state => state.forge.filter);
+    const handleChange = event => {
+        dispatch(CHANGE_FILTER(event.target.value));
+      };
     const postArr = [];
     Posts.forEach((post, index) => {
         postArr.push(
@@ -52,6 +57,23 @@ const PostContainer = () =>{
 
     return (
         <Box >
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id='demo-simple-select-label'>Filter</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                defaultValue={'Popular'}
+                value={filter}
+                label='Filter'
+                onChange={handleChange}>
+                {/* currently filters are hard-coded in and not dependent on state - populate filters with state instead */}
+                <MenuItem value={`Popular`}>Popular</MenuItem>
+                <MenuItem value={`Recent`}>Recent</MenuItem>
+                <MenuItem value={`Type`}>Type</MenuItem>
+              </Select>
+            </FormControl>
+            </Box>
             {postArr}
         </Box>
     )
