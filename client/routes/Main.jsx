@@ -1,4 +1,5 @@
 import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
 
 // TO DO - consider switching legacy mui/styles to mui/system
 import { styled } from '@mui/material/styles';
@@ -16,7 +17,6 @@ import IconButton from '@mui/material/IconButton';
 // shared subcomponents
 import Button from '@mui/material/Button';
 
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 
@@ -66,11 +66,14 @@ const main = () => {
   const navigate = useNavigate();
 
   // STATE HOOKS
+  // MOVED TO DRAWER
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
+  const drawerOpen = useSelector(state => state.forge.drawerOpen);
+
   const filter = useSelector(state => state.forge.filter);
   const postWindow = useSelector(state => state.forge.newPostWindow);
-  const drawerOpen = useSelector(state => state.forge.drawerOpen);
+
   const curPosts = useSelector(state => state.forge.curPosts);
 
   // HANDLERS
@@ -100,7 +103,6 @@ const main = () => {
   };
 
   // separate into post component
-
   const handleNewPost = async event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -132,6 +134,7 @@ const main = () => {
     dispatch(TOGGLE_POST_WINDOW());
   };
 
+  // MOVE TO POSTS?
   // update to get request - need to add category into query on end point
   // NEED TO REFACTOR ALL OF loadPosts to update posts when category changes
   const loadPosts = async event => {
@@ -147,6 +150,7 @@ const main = () => {
     dispatch(RENDER_TEST(parsedResponse));
   };
 
+  // MOVE TO POSTS?
   // load posts when curPage state changes
   React.useEffect(() => {
     loadPosts();
