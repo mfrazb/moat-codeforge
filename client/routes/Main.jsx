@@ -79,9 +79,6 @@ const main = () => {
   const filter = useSelector(state => state.forge.filter);
   const curPosts = useSelector(state => state.forge.curPosts);
 
-  // MOVE TO APPBAR CONTAINER?
-  const postWindow = useSelector(state => state.forge.newPostWindow);
-
   // HANDLERS
 
   // open and close CREATE NEW POST window
@@ -125,24 +122,6 @@ const main = () => {
     console.log(parsedResponse);
     dispatch(TOGGLE_POST_WINDOW());
   };
-  // const loadPosts = async event => {
-  //   const serverResponse = await fetch('http://localhost:3000/post/getposts', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ category: curPage }),
-  //   }).catch(err => {
-  //     console.log(err);
-  //   });
-  //   const parsedResponse = await serverResponse.json();
-  //   console.log(parsedResponse);
-  //   dispatch(RENDER_TEST(parsedResponse));
-  // };
-
-  // // load posts when curPage state changes
-  // React.useEffect(() => {
-  //   loadPosts();
-  // }, [curPage]);
-
   // MOVED TO DRAWER
   const newPage = page => {
     if (page === curPage) return;
