@@ -102,7 +102,6 @@ const main = () => {
   // get state from store
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
-  const filter = useSelector(state => state.forge.filter);
   const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
   const curPosts = useSelector(state => state.forge.curPosts);
@@ -110,10 +109,6 @@ const main = () => {
 
   const toggleDrawer = () => {
     dispatch(TOGGLE_DRAWER());
-  };
-
-  const handleChange = event => {
-    dispatch(CHANGE_FILTER(event.target.value));
   };
 
   // separate into post component
@@ -324,21 +319,6 @@ const main = () => {
         }}>
         <Container maxWidth='lg' sx={{ mt: 10, mb: 4 }}>
           <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-label'>Filter</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                defaultValue={'Popular'}
-                value={filter}
-                label='Filter'
-                onChange={handleChange}>
-                {/* currently filters are hard-coded in and not dependent on state - populate filters with state instead */}
-                <MenuItem value={`Popular`}>Popular</MenuItem>
-                <MenuItem value={`Recent`}>Recent</MenuItem>
-                <MenuItem value={`Type`}>Type</MenuItem>
-              </Select>
-            </FormControl>
             <div>
               {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed */}
               <Dialog open={postWindow} onClose={handlePostWindow}>
