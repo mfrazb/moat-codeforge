@@ -8,49 +8,54 @@ import { styled } from '@mui/material/styles';
 
 // Import containers
 import AppBarContainer from '../containers/AppBarContainer.jsx';
-// Import components
-import AppBar from '../components/AppBar.jsx';
-import Drawer from '../containers/DrawerContainer.jsx';
+import DrawerContainer from '../containers/DrawerContainer.jsx';
 
-// App Bar subcomponents
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+// Import components
+import Drawer from '../components/Drawer.jsx';
+import PostCreator from '../components/PostCreator.jsx';
+
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 
 // shared subcomponents
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
 
-import Container from '@mui/material/Container';
+// import MuiDrawer from '@mui/material/Drawer';
+import Link from '@mui/material/Link';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+// drawer subcomponents
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Link from '@mui/material/Link';
 import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import FunctionsIcon from '@mui/icons-material/Functions';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import FilterVintageIcon from '@mui/icons-material/FilterVintage';
 import LogoutIcon from '@mui/icons-material/Logout';
+import FunctionsIcon from '@mui/icons-material/Functions';
+
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import MenuItem from '@mui/material/MenuItem';
 
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   CHANGE_FILTER,
   TOGGLE_DRAWER,
@@ -83,23 +88,36 @@ const main = () => {
 
   // HANDLERS
 
+  // MOVE TO APPBAR CONTAINER ?
   // open and close CREATE NEW POST window
   const handlePostWindow = () => {
     dispatch(TOGGLE_POST_WINDOW());
   };
 
+  // MOVE TO DRAWER CONTAINER
   // open and close left drawer
   const toggleDrawer = () => {
     dispatch(TOGGLE_DRAWER());
   };
 
+  // MOVE TO DRAWER CONTAINER
+  const newPage = page => {
+    if (page === curPage) return;
+    dispatch(RENDER_TEST());
+    dispatch(SET_PAGE(page));
+  };
 
+  // MOVED TO DRAWER CONTAINER
+  const handleLogout = () => {
+    navigate('/');
+  };
 
-
+  // MOVE TO POST CONTAINER
   const handleChange = event => {
     dispatch(CHANGE_FILTER(event.target.value));
   };
 
+  // MOVE TO POST CREATOR ?
   // separate into post component
   const handleNewPost = async event => {
     event.preventDefault();
@@ -116,7 +134,7 @@ const main = () => {
       link,
       description,
     };
-    console.log(title, description, link, contentType);
+    console.log(title, contentType, curPage, curUser.id, description, link);
     const serverResponse = await fetch(
       'http://localhost:3000/post/createpost',
       {
@@ -131,6 +149,7 @@ const main = () => {
     console.log(parsedResponse);
     dispatch(TOGGLE_POST_WINDOW());
   };
+
   // const loadPosts = async event => {
   //   const serverResponse = await fetch('http://localhost:3000/post/getposts', {
   //     method: 'POST',
@@ -149,35 +168,25 @@ const main = () => {
   //   loadPosts();
   // }, [curPage]);
 
-  // MOVED TO DRAWER
-  const newPage = page => {
-    if (page === curPage) return;
-    dispatch(RENDER_TEST());
-    dispatch(SET_PAGE(page));
-  };
-
-  // MOVED TO DRAWER
-  const handleLogout = () => {
-    navigate('/');
-  };
-
   // move to create new post component
   // populates dropdown
   // separate out logic - options file that specifies different filters
-  const postType = [
-    {
-      value: 'article',
-      label: 'Article',
-    },
-    {
-      value: 'video',
-      label: 'Video',
-    },
-    {
-      value: 'tutorial',
-      label: 'Tutorial',
-    },
-  ];
+
+  // MOVE TO POSTCREATOR
+  // const postType = [
+  //   {
+  //     value: 'article',
+  //     label: 'Article',
+  //   },
+  //   {
+  //     value: 'video',
+  //     label: 'Video',
+  //   },
+  //   {
+  //     value: 'tutorial',
+  //     label: 'Tutorial',
+  //   },
+  // ];
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -191,7 +200,21 @@ const main = () => {
         handlePostWindow={handlePostWindow}
       />
       {/* side bar - break into another component */}
-      <Drawer variant='permanent' open={drawerOpen} drawerWidth={drawerWidth}>
+      {/*}
+      <Drawer
+        drawerOpen={drawerOpen} //
+        drawerWidth={drawerWidth} //
+        curUser={curUser}
+        curPage={curPage}
+        toggleDrawer={toggleDrawer}
+        newPage={newPage}
+        handleLogout={handleLogout}
+      />
+      */}
+      <Drawer
+        variant='permanent'
+        drawerOpen={drawerOpen}
+        drawerWidth={drawerWidth}>
         <Toolbar
           sx={{
             display: 'flex',
@@ -290,78 +313,11 @@ const main = () => {
                 <MenuItem value={`Type`}>Type</MenuItem>
               </Select>
             </FormControl>
-            <div>
-              {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed, need to allow user to not add https AND to specify category */}
-              <Dialog open={postWindow} onClose={handlePostWindow}>
-                <DialogTitle>Create New Post</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Please enter in the following information regarding your new
-                    post:
-                  </DialogContentText>
-                  <Box component='form' onSubmit={handleNewPost}>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      id='title'
-                      name='title'
-                      label='Title'
-                      type='text'
-                      fullWidth
-                      required
-                      variant='standard'
-                    />
-                    <TextField
-                      autoFocus
-                      required
-                      margin='dense'
-                      id='description'
-                      name='description'
-                      label='Description'
-                      type='text'
-                      fullWidth
-                      minRows={3}
-                      multiline
-                      variant='standard'
-                    />
-                    <TextField
-                      autoFocus
-                      required
-                      margin='dense'
-                      id='link'
-                      name='link'
-                      label='Link'
-                      type='url'
-                      fullWidth
-                      variant='standard'
-                    />
-                    <TextField
-                      autoFocus
-                      required
-                      margin='dense'
-                      id='content'
-                      name='content'
-                      label='Content Type'
-                      type='url'
-                      fullWidth
-                      defaultValue={'article'}
-                      select
-                      helperText='Please select the type of content'
-                      variant='standard'>
-                      {postType.map(option => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                    <DialogActions>
-                      <Button onClick={handlePostWindow}>Cancel</Button>
-                      <Button type='submit'>Submit Post</Button>
-                    </DialogActions>
-                  </Box>
-                </DialogContent>
-              </Dialog>
-            </div>
+            <PostCreator
+              postWindow={postWindow}
+              handlePostWindow={handlePostWindow}
+              handleNewPost={handleNewPost}
+            />
             <PostContainer />
           </Box>
         </Container>
