@@ -1,21 +1,29 @@
 import * as React from 'react';
+
+// TO DO - consider switching legacy mui/styles to mui/system
 import { styled } from '@mui/material/styles';
 
 // use deconstruction to import components from @mui/material
 
 // Import components
-import AppBar from './../containers/AppBar';
+import AppBar from './../containers/AppBar.jsx';
+import Drawer from './../containers/Drawer.jsx';
+
+// App Bar subcomponents
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+
+// shared subcomponents
+import Button from '@mui/material/Button';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
+
 import Container from '@mui/material/Container';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -54,31 +62,31 @@ const main = () => {
   const drawerWidth = 360;
 
   // make separate component
-  const Drawer = styled(MuiDrawer, {
-    shouldForwardProp: prop => prop !== 'open',
-  })(({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: 0,
-        },
-      }),
-    },
-  }));
+  // const Drawer = styled(MuiDrawer, {
+  //   shouldForwardProp: prop => prop !== 'open',
+  // })(({ theme, open }) => ({
+  //   '& .MuiDrawer-paper': {
+  //     position: 'relative',
+  //     whiteSpace: 'nowrap',
+  //     width: drawerWidth,
+  //     transition: theme.transitions.create('width', {
+  //       easing: theme.transitions.easing.sharp,
+  //       duration: theme.transitions.duration.enteringScreen,
+  //     }),
+  //     boxSizing: 'border-box',
+  //     ...(!open && {
+  //       overflowX: 'hidden',
+  //       transition: theme.transitions.create('width', {
+  //         easing: theme.transitions.easing.sharp,
+  //         duration: theme.transitions.duration.leavingScreen,
+  //       }),
+  //       width: theme.spacing(7),
+  //       [theme.breakpoints.up('sm')]: {
+  //         width: 0,
+  //       },
+  //     }),
+  //   },
+  // }));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -240,7 +248,7 @@ const main = () => {
         </Toolbar>
       </AppBar>
       {/* side bar - break into another component */}
-      <Drawer variant='permanent' open={drawerOpen}>
+      <Drawer variant='permanent' open={drawerOpen} drawerWidth={drawerWidth}>
         <Toolbar
           sx={{
             display: 'flex',

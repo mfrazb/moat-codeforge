@@ -4,8 +4,10 @@ import { styled } from '@mui/material/styles';
 // MUI components
 import { AppBar } from '@mui/material';
 
-// TO DO - move CSS Styling to AppBar.css ?
-// TO DO - 
+import { Toolbar, IconButton, Button } from '@mui/material';
+import { MenuIcon, AccountCircleIcon } from '@mui/icons-material';
+
+// TO DO - consider moving styling to AppBar.css
 
 const AppBarCF = styled(AppBar, {
   shouldForwardProp: prop => prop !== 'open',
