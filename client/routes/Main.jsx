@@ -59,6 +59,7 @@ import {
   RENDER_TEST,
 } from '../reducers/forgeReducer';
 import { useNavigate } from 'react-router-dom';
+import PostContainer from '../components/PostContainer';
 
 const main = () => {
   const drawerWidth = 360;
@@ -92,15 +93,8 @@ const main = () => {
     dispatch(TOGGLE_DRAWER());
   };
 
-  // container for React post components
-  // can leave here if main continues to be container for posts
-  const renderedPosts = curPosts.map((post, index) => (
-    <p>
-      <Link href={post.link} key={index}>
-        {post.title}
-      </Link>
-    </p>
-  ));
+
+
 
   const handleChange = event => {
     dispatch(CHANGE_FILTER(event.target.value));
@@ -137,28 +131,23 @@ const main = () => {
     console.log(parsedResponse);
     dispatch(TOGGLE_POST_WINDOW());
   };
+  // const loadPosts = async event => {
+  //   const serverResponse = await fetch('http://localhost:3000/post/getposts', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ category: curPage }),
+  //   }).catch(err => {
+  //     console.log(err);
+  //   });
+  //   const parsedResponse = await serverResponse.json();
+  //   console.log(parsedResponse);
+  //   dispatch(RENDER_TEST(parsedResponse));
+  // };
 
-  // MOVE TO POSTS?
-  // update to get request - need to add category into query on end point
-  // NEED TO REFACTOR ALL OF loadPosts to update posts when category changes
-  const loadPosts = async event => {
-    const serverResponse = await fetch('http://localhost:3000/post/getposts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ category: curPage }),
-    }).catch(err => {
-      console.log(err);
-    });
-    const parsedResponse = await serverResponse.json();
-    console.log(parsedResponse);
-    dispatch(RENDER_TEST(parsedResponse));
-  };
-
-  // MOVE TO POSTS?
-  // load posts when curPage state changes
-  React.useEffect(() => {
-    loadPosts();
-  }, [curPage]);
+  // // load posts when curPage state changes
+  // React.useEffect(() => {
+  //   loadPosts();
+  // }, [curPage]);
 
   // MOVED TO DRAWER
   const newPage = page => {
@@ -373,7 +362,7 @@ const main = () => {
                 </DialogContent>
               </Dialog>
             </div>
-            <Box sx={{ mt: 5 }}>{renderedPosts}</Box>
+            <PostContainer />
           </Box>
         </Container>
       </Box>
