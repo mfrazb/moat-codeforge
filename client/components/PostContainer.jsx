@@ -18,8 +18,6 @@ const PostContainer = () =>{
           console.log(err);
         });
         const parsedResponse = await serverResponse.json();
-        console.log(parsedResponse);
-        // 
         dispatch(RENDER_TEST(parsedResponse));
       };
       // Leaving this commented for when get request is there
@@ -35,16 +33,26 @@ const PostContainer = () =>{
       React.useEffect(() => {
         getPostData();
       }, [curPage]);
-    
-
-
-
-
     console.log('These are the Posts: ', Posts)
+
+    const postArr = [];
+    Posts.forEach((post, index) => {
+        postArr.push(
+            <div key={index} style={{border:'1px solid black', padding:'5px'}}>
+                {/* currently looking at user_id, may have to fetch which user created which post usign a get request */}
+                <label>Created by: </label><p>{post.user_id}</p><br></br>
+                <strong>{post.title}</strong><br></br>
+                <p>{post.description}</p><br></br>
+                <a href={post.link}>Link</a><br></br>
+                <label>Made at: </label><p>{post.date}</p><label>Upvotes: </label><p>{post.upvotes}</p>
+            </div>
+        )
+    })
+
 
     return (
         <Box >
-            <Typography >Test</Typography>
+            {postArr}
         </Box>
     )
 }
