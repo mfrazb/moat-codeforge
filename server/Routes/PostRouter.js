@@ -4,16 +4,21 @@ const postController = require('../Controllers/postController');
 
 const router = express.Router();
 
+//when there is a post request to the /creatpost endpoint and invoke the create post method on post controller
+// add return statement as best practice
 router.post('/createpost', postController.createPost, (req, res) => {
-    res.status(200).json({ message: 'Created post!'})
+    return res.status(200).json({ message: 'Created post!'})
 })
 
+// get request to /getposts end point and invoke getPosts method on postController
+// add return statement as best practice
 router.post('/getposts', postController.getPosts, (req, res) => {
-    res.status(200).json(res.locals.allPosts)
+    return res.status(200).json(res.locals.allPosts)
 })
-// route middleware still needs work
+
+// add return statement as best practice
 router.patch('/vote', postController.votePost, (req, res) => {
-    res.status(200).json({ message: 'Voted post!'})
+    return res.status(200).json({ message: 'Voted post!'})
 })
 
 
