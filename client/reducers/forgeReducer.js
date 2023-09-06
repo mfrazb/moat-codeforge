@@ -46,9 +46,10 @@ export const forgeSlice = createSlice({
       if (!action.payload) {
         state.curPosts = []
       } else {
-        action.payload.forEach(post => {
-          state.curPosts.push({title: post.title, link: post.link})
-        })
+        // action.payload.forEach(post => {
+        //   state.curPosts.push({title: post.title, link: post.link})
+        // })
+        state.curPosts = action.payload;
       };
       return state;
     },
