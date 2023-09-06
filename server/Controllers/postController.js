@@ -25,10 +25,8 @@ postController.createPost = async (req, res, next) => {
 
 postController.getPosts = async (req, res, next) => {
     try {
-        const { category } = req.body;
-        const getPostsQuery = `SELECT * FROM posts WHERE category = $1;`;
-        const params = [category];
-        const allPosts = await db.query(getPostsQuery, params);
+        const getPostsQuery = `SELECT * FROM posts`;
+        const allPosts = await db.query(getPostsQuery);
         res.locals.allPosts = allPosts.rows;
         return next();
     } catch (err) {

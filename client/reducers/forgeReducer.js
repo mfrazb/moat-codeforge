@@ -46,30 +46,12 @@ export const forgeSlice = createSlice({
       if (!action.payload) {
         state.curPosts = []
       } else {
-        action.payload.forEach(post => {
-          state.curPosts.push({title: post.title, link: post.link})
-        })
+        // action.payload.forEach(post => {
+        //   state.curPosts.push({title: post.title, link: post.link})
+        // })
+        state.curPosts = action.payload;
       };
       return state;
-    },
-    RENDER_POSTS: (state, action) => {//switch/case /fetch-> get array of objects -> use dispatcher to go through posts
-      //assume that action.payload is going to be an array of objects
-      //each object will have all of the properties of each post
-      //we will do the fetch request BEFORE calling the dispatcher, so we will have all the post info already
-  
-      const resp = 'Popular'
-        switch(resp) {
-          case 'Recent': for (const dateVal in action.payload) {
-            console.log(Math.min(...dateVal));
-          } //arrange results in order based off least greatest accumulated time
-            case 'Type': //database: ---| unit ---| type
-              console.log(action.type())
-            case 'Popular': for (const upvotes in action.payload) {
-              console.log(Math.max(...upvotes)); //arrange results in order based off highest number of upvotes (Math.max?)
-        
-          }
-        }
-    
     },
     SET_USER: (state, action) => {
       const {username, userID} = action.payload;

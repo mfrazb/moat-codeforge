@@ -8,7 +8,8 @@
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development concurrently \"webpack serve --open\" \"nodemon server/server.js\" ",
     "build_sql_tests": "./server/db/buildDB_wTests.sh",
-    "tests": "jest --verbose"
+    "tests": "jest --verbose",
+    "test_coverage": "jest --coverage"
   },
   "author": "CodeforgeLLC",
   "dependencies": {

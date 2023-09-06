@@ -77,14 +77,12 @@ const main = () => {
   // MOVE TO DRAWER CONTAINER
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
+  const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
 
   // MOVE TO POSTS CONTAINER
   const filter = useSelector(state => state.forge.filter);
   const curPosts = useSelector(state => state.forge.curPosts);
-
-  // MOVE TO APPBAR CONTAINER?
-  const postWindow = useSelector(state => state.forge.newPostWindow);
 
   // HANDLERS
 
@@ -100,24 +98,6 @@ const main = () => {
     dispatch(TOGGLE_DRAWER());
   };
 
-  // MOVE TO DRAWER CONTAINER
-  const newPage = page => {
-    if (page === curPage) return;
-    dispatch(RENDER_TEST());
-    dispatch(SET_PAGE(page));
-  };
-
-  // MOVED TO DRAWER CONTAINER
-  const handleLogout = () => {
-    navigate('/');
-  };
-
-  // MOVE TO POST CONTAINER
-  const handleChange = event => {
-    dispatch(CHANGE_FILTER(event.target.value));
-  };
-
-  // MOVE TO POST CREATOR ?
   // separate into post component
   const handleNewPost = async event => {
     event.preventDefault();
@@ -149,24 +129,17 @@ const main = () => {
     console.log(parsedResponse);
     dispatch(TOGGLE_POST_WINDOW());
   };
+  // MOVED TO DRAWER
+  const newPage = page => {
+    if (page === curPage) return;
+    dispatch(RENDER_TEST());
+    dispatch(SET_PAGE(page));
+  };
 
-  // const loadPosts = async event => {
-  //   const serverResponse = await fetch('http://localhost:3000/post/getposts', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ category: curPage }),
-  //   }).catch(err => {
-  //     console.log(err);
-  //   });
-  //   const parsedResponse = await serverResponse.json();
-  //   console.log(parsedResponse);
-  //   dispatch(RENDER_TEST(parsedResponse));
-  // };
-
-  // // load posts when curPage state changes
-  // React.useEffect(() => {
-  //   loadPosts();
-  // }, [curPage]);
+  // MOVED TO DRAWER
+  const handleLogout = () => {
+    navigate('/');
+  };
 
   // move to create new post component
   // populates dropdown
@@ -298,26 +271,78 @@ const main = () => {
         }}>
         <Container maxWidth='lg' sx={{ mt: 10, mb: 4 }}>
           <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-label'>Filter</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                defaultValue={'Popular'}
-                value={filter}
-                label='Filter'
-                onChange={handleChange}>
-                {/* currently filters are hard-coded in and not dependent on state - populate filters with state instead */}
-                <MenuItem value={`Popular`}>Popular</MenuItem>
-                <MenuItem value={`Recent`}>Recent</MenuItem>
-                <MenuItem value={`Type`}>Type</MenuItem>
-              </Select>
-            </FormControl>
-            <PostCreator
-              postWindow={postWindow}
-              handlePostWindow={handlePostWindow}
-              handleNewPost={handleNewPost}
-            />
+            <div>
+              {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed, need to allow user to not add https AND to specify category */}
+              <Dialog open={postWindow} onClose={handlePostWindow}>
+                <DialogTitle>Create New Post</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please enter in the following information regarding your new
+                    post:
+                  </DialogContentText>
+                  <Box component='form' onSubmit={handleNewPost}>
+                    <TextField
+                      autoFocus
+                      margin='dense'
+                      id='title'
+                      name='title'
+                      label='Title'
+                      type='text'
+                      fullWidth
+                      required
+                      variant='standard'
+                    />
+                    <TextField
+                      autoFocus
+                      required
+                      margin='dense'
+                      id='description'
+                      name='description'
+                      label='Description'
+                      type='text'
+                      fullWidth
+                      minRows={3}
+                      multiline
+                      variant='standard'
+                    />
+                    <TextField
+                      autoFocus
+                      required
+                      margin='dense'
+                      id='link'
+                      name='link'
+                      label='Link'
+                      type='url'
+                      fullWidth
+                      variant='standard'
+                    />
+                    <TextField
+                      autoFocus
+                      required
+                      margin='dense'
+                      id='content'
+                      name='content'
+                      label='Content Type'
+                      type='url'
+                      fullWidth
+                      defaultValue={'article'}
+                      select
+                      helperText='Please select the type of content'
+                      variant='standard'>
+                      {postType.map(option => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <DialogActions>
+                      <Button onClick={handlePostWindow}>Cancel</Button>
+                      <Button type='submit'>Submit Post</Button>
+                    </DialogActions>
+                  </Box>
+                </DialogContent>
+              </Dialog>
+            </div>
             <PostContainer />
           </Box>
         </Container>
