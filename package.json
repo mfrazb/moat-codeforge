@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node server/server.js",
+    "start": "NODE_ENV=production concurrently \"node server/server.js\" \"./server/db/sessionScheduler.sh\"",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development concurrently \"webpack serve --open\" \"nodemon server/server.js\""
+    "dev": "NODE_ENV=development concurrently \"webpack serve --open\" \"nodemon server/server.js\" \"./server/db/sessionScheduler.sh\"",
+    "build_sql_tests": "./server/db/buildDB_wTests.sh"
   },
   "author": "CodeforgeLLC",
   "dependencies": {
@@ -29,6 +30,7 @@
     "mongoose": "^5.11.9",
     "node-fetch": "^2.3.0",
     "pg": "^8.11.3",
+    "pg-format": "^1.0.4",
     "pg-promise": "^11.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
