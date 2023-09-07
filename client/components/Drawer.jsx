@@ -1,8 +1,8 @@
 import React from 'react';
+// TO DO - consider switching legacy mui/styles to mui/system
 import { styled } from '@mui/material/styles';
 
-
-// MUI components
+// MUI COMPONENTS
 import {
   Drawer,
   Toolbar,
@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 
-// MUI icons
+// MUI ICONS
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import GridOnIcon from '@mui/icons-material/GridOn';
@@ -23,6 +23,7 @@ import FilterVintageIcon from '@mui/icons-material/FilterVintage';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FunctionsIcon from '@mui/icons-material/Functions';
 
+// DRAWER - apply styling dependent on state changes - theme, drawerOpen, drawerWidth
 const DrawerCF = styled(Drawer, {
   shouldForwardProp: prop => prop !== 'drawerOpen',
 })(({ theme, drawerOpen, drawerWidth }) => ({
