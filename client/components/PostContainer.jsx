@@ -23,7 +23,6 @@ const PostContainer = () => {
   const handleChange = event => {
     dispatch(CHANGE_FILTER(event.target.value));
   };
-  console.log('newPostWindow = ', newPostWindow);
   const getPostData = async () => {
     const serverResponse = await fetch('/post/getposts',
     ).catch(err => {
@@ -75,7 +74,9 @@ const PostContainer = () => {
           minWidth: '500px',
         }}>
         <strong>{post.title}</strong>
-        <label>{post.username} posted this on {date.toUTCString()}</label>
+        <label>
+          {post.username} posted this on {date.toUTCString()}
+        </label>
         <p>{post.description}</p>
         <br></br>
         <a href={post.link}>Link: {`${post.link}`}</a>

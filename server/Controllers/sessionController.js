@@ -2,11 +2,10 @@ const db = require('../Models/UserModel.js');
 
 sessionController = {};
 
-
 /**
-* isLoggedIn - find the appropriate session for this request in the database, then
-* verify whether or not the session is still valid.
-*/
+ * isLoggedIn - find the appropriate session for this request in the database, then
+ * verify whether or not the session is still valid.
+ */
 sessionController.isLoggedIn = async (req, res, next) => {
   try{
     const SSID = req.cookies.ssid;
@@ -93,8 +92,7 @@ sessionController.checkSession = async(req, res, next) => {
 //     }
 //     next();
 //   };
-  
+
 //   module.exports = sessionController;
 
-
-  module.exports = sessionController;
+module.exports = sessionController;
