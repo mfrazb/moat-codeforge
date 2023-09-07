@@ -1,17 +1,35 @@
 import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+
+// TO DO - consider switching legacy mui/styles to mui/system
 import { styled } from '@mui/material/styles';
 
 // use deconstruction to import components from @mui/material
-import CssBaseline from '@mui/material/CssBaseline';
+
+// Import containers
+import AppBarContainer from '../containers/AppBarContainer.jsx';
+import DrawerContainer from '../containers/DrawerContainer.jsx';
+import PostContainer from '../components/PostContainer';
+
+// Import components
+import AppBar from '../components/AppBar.jsx';
+import Drawer from '../components/Drawer.jsx';
+import PostCreator from '../components/PostCreator.jsx';
+
+// App Bar subcomponents
+
+// shared subcomponents
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
+
 import Container from '@mui/material/Container';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -45,82 +63,38 @@ import {
   RENDER_TEST,
 } from '../reducers/forgeReducer';
 import { useNavigate } from 'react-router-dom';
-import PostContainer from '../components/PostContainer';
 
 const main = () => {
   const drawerWidth = 360;
 
-  // make separate component
-  const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: prop => prop !== 'open',
-  })(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
-
-  // make separate component
-  const Drawer = styled(MuiDrawer, {
-    shouldForwardProp: prop => prop !== 'open',
-  })(({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: 0,
-        },
-      }),
-    },
-  }));
-
+  // REACT HOOKS
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // get state from store
+  // STATE HOOKS
+  // MOVE TO DRAWER CONTAINER
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
-  const filter = useSelector(state => state.forge.filter);
   const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
+
+  // MOVE TO POSTS CONTAINER
+  const filter = useSelector(state => state.forge.filter);
   const curPosts = useSelector(state => state.forge.curPosts);
 
+  // HANDLERS
 
-  const toggleDrawer = () => {
-    dispatch(TOGGLE_DRAWER());
-  };
-
-  const handleChange = event => {
-    dispatch(CHANGE_FILTER(event.target.value));
-  };
-
-  // separate into post component
+  // open and close CREATE NEW POST window
   const handlePostWindow = () => {
     dispatch(TOGGLE_POST_WINDOW());
   };
 
+  // open and close left drawer
+  const toggleDrawer = () => {
+    dispatch(TOGGLE_DRAWER());
+  };
+
+  // separate into post component
   const handleNewPost = async event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -151,33 +125,14 @@ const main = () => {
     console.log(parsedResponse);
     dispatch(TOGGLE_POST_WINDOW());
   };
-  // const loadPosts = async event => {
-  //   const serverResponse = await fetch('http://localhost:3000/post/getposts', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ category: curPage }),
-  //   }).catch(err => {
-  //     console.log(err);
-  //   });
-  //   const parsedResponse = await serverResponse.json();
-  //   console.log(parsedResponse);
-  //   dispatch(RENDER_TEST(parsedResponse));
-  // };
-
-  // // load posts when curPage state changes
-  // React.useEffect(() => {
-  //   loadPosts();
-  // }, [curPage]);
-
-  //
+  // MOVED TO DRAWER
   const newPage = page => {
     if (page === curPage) return;
     dispatch(RENDER_TEST());
     dispatch(SET_PAGE(page));
   };
 
-  // navigate back to log in page
-  // could address sessions later on
+  // MOVED TO DRAWER
   const handleLogout = () => {
     navigate('/');
   };
@@ -203,44 +158,19 @@ const main = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      {/* check HTML - if all one unit, separate to another component */}
-      <AppBar position='absolute' open={drawerOpen} color='error'>
-        <Toolbar
-          sx={{
-            pr: '24px', // keep right padding when drawer closed
-          }}>
-          <IconButton
-            edge='start'
-            color='inherit'
-            aria-label='open drawer'
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: '36px',
-              ...(drawerOpen && { display: 'none' }),
-            }}>
-            <MenuIcon />
-          </IconButton>
-          <IconButton>
-            <AccountCircleIcon />
-          </IconButton>
-          <Typography
-            component='h1'
-            variant='h5'
-            color='inherit'
-            noWrap
-            sx={{ flexGrow: 1, ml: 2 }}>
-            {curUser.name}
-          </Typography>
-          <Typography component='h1' variant='h5' sx={{ flexGrow: 1 }}>
-            {curPage}
-          </Typography>
-          <Button variant='contained' onClick={handlePostWindow} color='error'>
-            Create New Post
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <AppBarContainer
+        drawerOpen={drawerOpen}
+        drawerWidth={drawerWidth}
+        curPage={curPage}
+        curUser={curUser}
+        toggleDrawer={toggleDrawer}
+        handlePostWindow={handlePostWindow}
+      />
       {/* side bar - break into another component */}
-      <Drawer variant='permanent' open={drawerOpen}>
+      <Drawer
+        variant='permanent'
+        drawerOpen={drawerOpen}
+        drawerWidth={drawerWidth}>
         <Toolbar
           sx={{
             display: 'flex',
@@ -324,23 +254,7 @@ const main = () => {
         }}>
         <Container maxWidth='lg' sx={{ mt: 10, mb: 4 }}>
           <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-label'>Filter</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                defaultValue={'Popular'}
-                value={filter}
-                label='Filter'
-                onChange={handleChange}>
-                {/* currently filters are hard-coded in and not dependent on state - populate filters with state instead */}
-                <MenuItem value={`Popular`}>Popular</MenuItem>
-                <MenuItem value={`Recent`}>Recent</MenuItem>
-                <MenuItem value={`Type`}>Type</MenuItem>
-              </Select>
-            </FormControl>
             <div>
-              {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed */}
               <Dialog open={postWindow} onClose={handlePostWindow}>
                 <DialogTitle>Create New Post</DialogTitle>
                 <DialogContent>
@@ -411,6 +325,12 @@ const main = () => {
                 </DialogContent>
               </Dialog>
             </div>
+            {/*<PostCreator
+              postWindow={postWindow}
+              handlePostWindow={handlePostWindow}
+              handleNewPost={handleNewPost}
+            />
+          */}
             <PostContainer />
           </Box>
         </Container>

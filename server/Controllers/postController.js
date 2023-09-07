@@ -13,8 +13,7 @@ postController.createPost = async (req, res, next) => {
         const createPostQuery = `INSERT INTO posts (user_id, title, link, description, category, type) VALUES ($1, $2, $3, $4, $5, $6);`;
         // db.query method pulls below parameters from DB and inserts them into posts
         const params = [userId, title, link, description, category, type];
-        // use query method to extract desired fields from DB
-        db.query(createPostQuery, params);
+        await db.query(createPostQuery, params);
         return next();
     // if there is an error log and return string back to 
     } catch(err) {
@@ -29,13 +28,8 @@ postController.createPost = async (req, res, next) => {
 // 
 postController.getPosts = async (req, res, next) => {
     try {
-        // deconstructs category property from request body
-        const { category } = req.body;
-        const getPostsQuery = `SELECT * FROM posts WHERE category = $1;`;
-        // assaign parameter as a nested array of categories 
-        const params = [category];
-        console.log
-        const allPosts = await db.query(getPostsQuery, params);
+        const getPostsQuery = `SELECT * FROM posts`;
+        const allPosts = await db.query(getPostsQuery);
         res.locals.allPosts = allPosts.rows;
         return next();
     } catch (err) {

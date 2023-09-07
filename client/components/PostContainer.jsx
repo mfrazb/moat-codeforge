@@ -1,61 +1,109 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
-import {RENDER_TEST} from '../reducers/forgeReducer';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { RENDER_TEST, CHANGE_FILTER } from "../reducers/forgeReducer";
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import filterSortingDefs from "../misc/sortingDefs";
 
-const PostContainer = () =>{
-    const dispatch = useDispatch();
-    // Pull State of Page into post container
-    const curPage = useSelector(state => state.forge.currentPage);
-    const Posts = useSelector(state => state.forge.curPosts);
-    // Fetch post data from database // old with post request...
-    const getPostData = async () => {
-        const serverResponse = await fetch('http://localhost:3000/post/getposts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category: curPage }),
-        }).catch(err => {
-          console.log(err);
-        });
-        const parsedResponse = await serverResponse.json();
-        dispatch(RENDER_TEST(parsedResponse));
-      };
-      // Leaving this commented for when get request is there
-    //   const getPostData = async () => {
-    //     const serverResponse = await fetch('http://localhost:3000/post/getposts').catch(err => {
-    //       console.log(err);
-    //     });
-    //     const parsedResponse = await serverResponse.json().filter((post) => post.content_type === curPage);
-    //     console.log(parsedResponse);
-    //     dispatch(RENDER_TEST(parsedResponse));
-    //   };
-      // load posts when curPage state changes
-      React.useEffect(() => {
-        getPostData();
-      }, [curPage]);
-    console.log('These are the Posts: ', Posts)
+const PostContainer = () => {
+  const dispatch = useDispatch();
+  // Pull State of Page into post container
+  const curPage = useSelector((state) => state.forge.currentPage);
+  const Posts = useSelector((state) => state.forge.curPosts);
+  const filter = useSelector((state) => state.forge.filter);
+  const handleChange = (event) => {
+    dispatch(CHANGE_FILTER(event.target.value));
+  };
+  const getPostData = async () => {
+    const serverResponse = await fetch(
+      "http://localhost:3000/post/getposts"
+    ).catch((err) => {
+      console.log(err);
+    });
+    const parsedResponse = await serverResponse.json();
+    const filteredResponse = parsedResponse.filter((post) => post.category === curPage);
+    filteredResponse.sort(filterSortingDefs[filter])
+    dispatch(RENDER_TEST(filteredResponse));
+  };
+  const handleThumbsUp = async (event) => {
+    console.log(event.target.value)
+    const serverResponse = await fetch(
+      'http://localhost:3000/post/vote',
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({vote: 'up', link: event.target.value}),
+      },
+    ).catch(err => {
+      console.log(err);
+    });
+    getPostData();
+  };
+  const handleThumbsDown = async (event) => {
+    console.log(event.target.value)
+    const serverResponse = await fetch(
+      'http://localhost:3000/post/vote',
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({vote: 'down', link: event.target.value}),
+      },
+    ).catch(err => {
+      console.log(err);
+    });
+    getPostData();
+  };
+  React.useEffect(() => {
+    getPostData();
+  }, [curPage, filter]);
 
-    const postArr = [];
-    Posts.forEach((post, index) => {
-        postArr.push(
-            <div key={index} style={{border:'1px solid black', padding:'5px'}}>
-                {/* currently looking at user_id, may have to fetch which user created which post usign a get request */}
-                <label>Created by: </label><p>{post.user_id}</p><br></br>
-                <strong>{post.title}</strong><br></br>
-                <p>{post.description}</p><br></br>
-                <a href={post.link}>Link</a><br></br>
-                <label>Made at: </label><p>{post.date}</p><label>Upvotes: </label><p>{post.upvotes}</p>
-            </div>
-        )
-    })
-
-
-    return (
-        <Box >
-            {postArr}
-        </Box>
+  const postArr = [];
+  Posts.forEach((post, index) => {
+    let date = new Date(post.date_submitted);
+    postArr.push(
+      <div key={index} style={{ border: "1px solid black", padding: "5px", display: 'flex', flexDirection: 'column' }}>
+        <strong>{post.title}</strong>
+        <label>User {post.user_id} posted this on {date.toUTCString()}</label>
+        <p>{post.description}</p>
+        <br></br>
+        <a href={post.link}>Link: {`${post.link}`}</a>
+        <br></br>
+        <div style={{display:'flex', flexDirection: 'column', alignSelf:'center'}}>
+        <label>{post.upvotes} people upvoted this. </label>
+        <Button variant="outlined" value={post.link} startIcon={<ThumbUpOutlinedIcon />} style={{border:'1px solid red', color:'red', width:'200px'}} onClick={handleThumbsUp}>Upvote This!</Button>
+        <Button variant="outlined" value={post.link} startIcon={<ThumbDownOffAltIcon />} style={{border:'1px solid red', color:'red' , width:'200px'}} onClick={handleThumbsDown}>Downvote This!</Button> 
+        </div>
+      </div>
+    );
+  });
+  const filterArr = [];
+  Object.keys(filterSortingDefs).forEach((filterType) => {
+    filterArr.push(
+      <MenuItem value={filterType}>{filterType}</MenuItem>
     )
-}
+  })
+
+  return (
+    <Box>
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            defaultValue={"Popular"}
+            value={filter}
+            label="Filter"
+            onChange={handleChange}
+          >
+            {filterArr}
+          </Select>
+        </FormControl>
+      </Box>
+      {postArr}
+    </Box>
+  );
+};
 
 export default PostContainer;
-
