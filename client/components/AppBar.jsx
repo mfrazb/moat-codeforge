@@ -16,7 +16,7 @@ const AppBarCF = styled(AppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(drawerOpen && {
-    marginLeft: drawerWidth,
+    marginLeft: `${drawerWidth}px`,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -34,6 +34,7 @@ export default function AppBarUsage(props) {
     toggleDrawer,
     handlePostWindow,
   } = props;
+
   return (
     <AppBar
       position='absolute'
@@ -76,5 +77,3 @@ export default function AppBarUsage(props) {
     </AppBar>
   );
 }
-
-// export default AppBarCF;

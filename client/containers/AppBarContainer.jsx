@@ -15,7 +15,7 @@ const AppBarContainer = props => {
   // STATE HOOKS
   // const postWindow = useSelector(state => state.forge.newPostWindow);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // HANDLERS
   // open and close CREATE NEW POST window
