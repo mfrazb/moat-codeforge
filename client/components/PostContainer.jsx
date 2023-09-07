@@ -31,10 +31,9 @@ const PostContainer = () => {
       console.log(err);
     });
     const parsedResponse = await serverResponse.json();
-    const filteredResponse = parsedResponse.filter(
-      post => post.category === curPage,
-    );
+    const filteredResponse = parsedResponse.filter((post) => post.category === curPage);
     filteredResponse.sort(filterSortingDefs[filter]);
+    console.log(filteredResponse);
     dispatch(RENDER_TEST(filteredResponse));
   };
   const handleThumbsUp = async event => {
@@ -77,9 +76,7 @@ const PostContainer = () => {
           minWidth: '500px',
         }}>
         <strong>{post.title}</strong>
-        <label>
-          User {post.user_id} posted this on {date.toUTCString()}
-        </label>
+        <label>{post.username} posted this on {date.toUTCString()}</label>
         <p>{post.description}</p>
         <br></br>
         <a href={post.link}>Link: {`${post.link}`}</a>
