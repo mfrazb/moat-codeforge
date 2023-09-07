@@ -1,68 +1,57 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 
-// TO DO - consider switching legacy mui/styles to mui/system
-import { styled } from '@mui/material/styles';
+// REACT HOOKS
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-// use deconstruction to import components from @mui/material
+// REDUCERS
+import {
+  TOGGLE_DRAWER,
+  TOGGLE_POST_WINDOW,
+  SET_PAGE,
+  RENDER_TEST,
+} from '../reducers/forgeReducer';
 
-// Import containers
+// MUI COMPONENTS
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+
+// CONTAINERS
 import AppBarContainer from '../containers/AppBarContainer.jsx';
 import DrawerContainer from '../containers/DrawerContainer.jsx';
 import PostContainer from '../components/PostContainer';
 
-// Import components
+// COMPONENTS
 import AppBar from '../components/AppBar.jsx';
 import Drawer from '../components/Drawer.jsx';
 import PostCreator from '../components/PostCreator.jsx';
 
-// App Bar subcomponents
-
-// shared subcomponents
+// DRAWER subcomponents
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-
-import Container from '@mui/material/Container';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Link from '@mui/material/Link';
 import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import FilterVintageIcon from '@mui/icons-material/FilterVintage';
 import LogoutIcon from '@mui/icons-material/Logout';
-import InputLabel from '@mui/material/InputLabel';
+
+// PostCreator components
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  CHANGE_FILTER,
-  TOGGLE_DRAWER,
-  TOGGLE_POST_WINDOW,
-  SET_PAGE,
-  RENDER_TEST,
-} from '../reducers/forgeReducer';
-import { useNavigate } from 'react-router-dom';
 
 const main = () => {
   const drawerWidth = 360;

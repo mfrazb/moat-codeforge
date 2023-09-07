@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 
+// MUI COMPONENTS
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import {
 const PostCreator = props => {
   const { postWindow, handlePostWindow, handleNewPost } = props;
 
+  // TO DO: move post types to misc folder
   const postType = [
     {
       value: 'article',

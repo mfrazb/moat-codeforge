@@ -1,12 +1,16 @@
 import React from 'react';
+// TO DO - consider switching legacy mui/styles to mui/system
 import { styled } from '@mui/material/styles';
 
-// MUI components
+// MUI COMPONENTS
 import { AppBar, Toolbar, IconButton, Button, Typography } from '@mui/material';
+
+// MUI ICONS
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // TO DO - consider moving styling to AppBar.css
 
+// APPBAR - apply styling depndent on state changes - theme, drawerOpen, drawerWidth
 const AppBarCF = styled(AppBar, {
   shouldForwardProp: prop => prop !== 'drawerOpen',
 })(({ theme, drawerOpen, drawerWidth }) => ({

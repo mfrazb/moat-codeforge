@@ -1,6 +1,10 @@
 import React from 'react';
+
+// REACT HOOKS
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
+// COMPONENTS
 import Drawer from '../components/Drawer.jsx';
 
 const DrawerContainer = props => {

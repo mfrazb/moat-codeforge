@@ -1,5 +1,9 @@
 import React from 'react';
+
+// REACT HOOKS
 import { useDispatch, useSelector } from 'react-redux';
+
+// COMPONENTS
 import AppBar from '../components/AppBar.jsx';
 
 const AppBarContainer = props => {
