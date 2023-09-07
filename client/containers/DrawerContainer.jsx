@@ -1,49 +1,30 @@
 import React from 'react';
-
-// REACT HOOKS
+// HOOKS
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+// REDUCERS
+import { SET_PAGE, RENDER_TEST } from '../reducers/forgeReducer';
 // COMPONENTS
 import Drawer from '../components/Drawer.jsx';
 
 const DrawerContainer = props => {
-  const {
-    drawerOpen,
-    drawerWidth,
-    curPage,
-    curUser,
-    toggleDrawer,
-    newPage,
-    handleLogout,
-  } = props;
+  const { drawerOpen, drawerWidth, curPage, curUser, toggleDrawer } = props;
 
-  // STATE HOOKS
-  // const drawerOpen = useSelector(state => state.forge.drawerOpen);
-  // const curUser = useSelector(state => state.forge.currentUser);
-  // const curPage = useSelector(state => state.forge.currentPage);
-  // const dispatch = useDispatch();
-
-  // HANDLERS
-
-  // OPEN/CLOSE SIDEBAR
-  // const toggleDrawer = () => {
-  //   dispatch(TOGGLE_DRAWER());
-  // };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // SELECT CATEGORY - set posts to new category
-  // TO DO - rename to selectCategory?
-  // const newPage = page => {
-  //   if (page === curPage) return;
-  //   dispatch(RENDER_TEST());
-  //   dispatch(SET_PAGE(page));
-  // };
+  const selectPage = page => {
+    if (page === curPage) return;
+    dispatch(RENDER_TEST());
+    dispatch(SET_PAGE(page));
+  };
 
   // LOGOUT -  redirect to login page
   // TO DO - address sessions in handler
-  // const handleLogout = () => {
-  //   navigate('/');
-  // };
+  const handleLogout = () => {
+    navigate('/');
+  };
 
   return (
     <div>
@@ -52,7 +33,7 @@ const DrawerContainer = props => {
         drawerWidth={drawerWidth}
         curPage={curPage}
         curUser={curUser}
-        newPage={newPage}
+        selectPage={selectPage}
         handleLogout={handleLogout}
         toggleDrawer={toggleDrawer}
       />

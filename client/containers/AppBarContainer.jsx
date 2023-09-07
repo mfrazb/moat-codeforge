@@ -1,8 +1,6 @@
 import React from 'react';
-
 // REACT HOOKS
 import { useDispatch, useSelector } from 'react-redux';
-
 // COMPONENTS
 import AppBar from '../components/AppBar.jsx';
 
@@ -15,22 +13,6 @@ const AppBarContainer = props => {
     toggleDrawer,
     handlePostWindow,
   } = props;
-
-  // STATE HOOKS
-  // const postWindow = useSelector(state => state.forge.newPostWindow);
-
-  // const dispatch = useDispatch();
-
-  // HANDLERS
-  // open and close CREATE NEW POST window
-  // const handlePostWindow = () => {
-  //   dispatch(TOGGLE_POST_WINDOW());
-  // };
-
-  // open and close left drawer
-  // const toggleDrawer = () => {
-  //   dispatch(TOGGLE_DRAWER());
-  // };
 
   return (
     <div>

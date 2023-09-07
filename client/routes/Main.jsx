@@ -1,77 +1,48 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-
-// REACT HOOKS
+// HOOKS
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
 // REDUCERS
-import {
-  TOGGLE_DRAWER,
-  TOGGLE_POST_WINDOW,
-  SET_PAGE,
-  RENDER_TEST,
-} from '../reducers/forgeReducer';
-
+import { TOGGLE_DRAWER, TOGGLE_POST_WINDOW } from '../reducers/forgeReducer';
+// MUI STYLES
+import CssBaseline from '@mui/material/CssBaseline';
 // MUI COMPONENTS
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-
 // CONTAINERS
 import AppBarContainer from '../containers/AppBarContainer.jsx';
 import DrawerContainer from '../containers/DrawerContainer.jsx';
 import PostContainer from '../components/PostContainer';
-
 // COMPONENTS
-import AppBar from '../components/AppBar.jsx';
-import Drawer from '../components/Drawer.jsx';
+// import Drawer from '../components/Drawer.jsx';
 import PostCreator from '../components/PostCreator.jsx';
 
 // DRAWER subcomponents
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import FunctionsIcon from '@mui/icons-material/Functions';
-import ConstructionIcon from '@mui/icons-material/Construction';
-import GridOnIcon from '@mui/icons-material/GridOn';
-import FilterVintageIcon from '@mui/icons-material/FilterVintage';
-import LogoutIcon from '@mui/icons-material/Logout';
-
-// PostCreator components
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+// import Toolbar from '@mui/material/Toolbar';
+// import IconButton from '@mui/material/IconButton';
+// import Button from '@mui/material/Button';
+// import List from '@mui/material/List';
+// import Typography from '@mui/material/Typography';
+// import Divider from '@mui/material/Divider';
+// import ListItemButton from '@mui/material/ListItemButton';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
+// import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+// import FunctionsIcon from '@mui/icons-material/Functions';
+// import ConstructionIcon from '@mui/icons-material/Construction';
+// import GridOnIcon from '@mui/icons-material/GridOn';
+// import FilterVintageIcon from '@mui/icons-material/FilterVintage';
+// import LogoutIcon from '@mui/icons-material/Logout';
 
 const main = () => {
   const drawerWidth = 360;
 
-  // REACT HOOKS
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  // STATE HOOKS
-  // MOVE TO DRAWER CONTAINER
+  // STATE
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
   const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
-
-  // MOVE TO POSTS CONTAINER
-  const filter = useSelector(state => state.forge.filter);
-  const curPosts = useSelector(state => state.forge.curPosts);
-
-  // HANDLERS
 
   // open and close CREATE NEW POST window
   const handlePostWindow = () => {
@@ -82,67 +53,6 @@ const main = () => {
   const toggleDrawer = () => {
     dispatch(TOGGLE_DRAWER());
   };
-
-  // separate into post component
-  const handleNewPost = async event => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const title = data.get('title');
-    const description = data.get('description');
-    const link = data.get('link');
-    const contentType = data.get('content');
-    const request = {
-      title,
-      type: contentType,
-      category: curPage,
-      userId: curUser.id,
-      link,
-      description,
-    };
-    console.log(title, description, link, contentType);
-    const serverResponse = await fetch(
-      'http://localhost:3000/post/createpost',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request),
-      },
-    ).catch(err => {
-      console.log(err);
-    });
-    const parsedResponse = await serverResponse.json();
-    console.log(parsedResponse);
-    dispatch(TOGGLE_POST_WINDOW());
-  };
-  // MOVED TO DRAWER
-  const newPage = page => {
-    if (page === curPage) return;
-    dispatch(RENDER_TEST());
-    dispatch(SET_PAGE(page));
-  };
-
-  // MOVED TO DRAWER
-  const handleLogout = () => {
-    navigate('/');
-  };
-
-  // move to create new post component
-  // populates dropdown
-  // separate out logic - options file that specifies different filters
-  const postType = [
-    {
-      value: 'article',
-      label: 'Article',
-    },
-    {
-      value: 'video',
-      label: 'Video',
-    },
-    {
-      value: 'tutorial',
-      label: 'Tutorial',
-    },
-  ];
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -155,8 +65,14 @@ const main = () => {
         toggleDrawer={toggleDrawer}
         handlePostWindow={handlePostWindow}
       />
-      {/* side bar - break into another component */}
-      <Drawer
+      <DrawerContainer
+        drawerOpen={drawerOpen}
+        drawerWidth={drawerWidth}
+        curUser={curUser}
+        curPage={curPage}
+        toggleDrawer={toggleDrawer}
+      />
+      {/*<Drawer
         variant='permanent'
         drawerOpen={drawerOpen}
         drawerWidth={drawerWidth}>
@@ -229,7 +145,7 @@ const main = () => {
             <ListItemText primary='Log Out' onClick={handleLogout} />
           </ListItemButton>
         </List>
-      </Drawer>
+      </Drawer> */}
       <Box
         component='main'
         sx={{
@@ -243,83 +159,12 @@ const main = () => {
         }}>
         <Container maxWidth='lg' sx={{ mt: 10, mb: 4 }}>
           <Box sx={{ minWidth: 120 }}>
-            <div>
-              <Dialog open={postWindow} onClose={handlePostWindow}>
-                <DialogTitle>Create New Post</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Please enter in the following information regarding your new
-                    post:
-                  </DialogContentText>
-                  <Box component='form' onSubmit={handleNewPost}>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      id='title'
-                      name='title'
-                      label='Title'
-                      type='text'
-                      fullWidth
-                      required
-                      variant='standard'
-                    />
-                    <TextField
-                      autoFocus
-                      required
-                      margin='dense'
-                      id='description'
-                      name='description'
-                      label='Description'
-                      type='text'
-                      fullWidth
-                      minRows={3}
-                      multiline
-                      variant='standard'
-                    />
-                    <TextField
-                      autoFocus
-                      required
-                      margin='dense'
-                      id='link'
-                      name='link'
-                      label='Link'
-                      type='url'
-                      fullWidth
-                      variant='standard'
-                    />
-                    <TextField
-                      autoFocus
-                      required
-                      margin='dense'
-                      id='content'
-                      name='content'
-                      label='Content Type'
-                      type='url'
-                      fullWidth
-                      defaultValue={'article'}
-                      select
-                      helperText='Please select the type of content'
-                      variant='standard'>
-                      {postType.map(option => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                    <DialogActions>
-                      <Button onClick={handlePostWindow}>Cancel</Button>
-                      <Button type='submit'>Submit Post</Button>
-                    </DialogActions>
-                  </Box>
-                </DialogContent>
-              </Dialog>
-            </div>
-            {/*<PostCreator
+            <PostCreator
               postWindow={postWindow}
               handlePostWindow={handlePostWindow}
-              handleNewPost={handleNewPost}
+              curPage={curPage}
+              curUser={curUser}
             />
-          */}
             <PostContainer />
           </Box>
         </Container>
@@ -328,9 +173,4 @@ const main = () => {
   );
 };
 
-/*potential icons - code Rep
-  - import TrendingUpTwoToneIcon from '@mui/icons-material/TrendingUpTwoTone';
-*/
-
-//create post -> get post -> upvotes
 export default main;
