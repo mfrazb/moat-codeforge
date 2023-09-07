@@ -38,10 +38,12 @@ const Login = () => {
     const serverResponse = await fetch('http://localhost:3000/user/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      // credentials: "include",
       body: JSON.stringify({ username, password }),
     }).catch(err => {
       console.log(err);
     });
+    console.log('server response', serverResponse)
     const parsedResponse = await serverResponse.json();
     console.log(parsedResponse);
     if (serverResponse.status === 200) {

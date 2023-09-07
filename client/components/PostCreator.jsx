@@ -37,7 +37,7 @@ const PostCreator = props => {
     };
     console.log(title, description, link, contentType);
     const serverResponse = await fetch(
-      'http://localhost:3000/post/createpost',
+      '/post/createpost',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -46,8 +46,6 @@ const PostCreator = props => {
     ).catch(err => {
       console.log(err);
     });
-    const parsedResponse = await serverResponse.json();
-    console.log(parsedResponse);
     dispatch(TOGGLE_POST_WINDOW());
   };
 

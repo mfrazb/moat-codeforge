@@ -16,8 +16,8 @@ module.exports = {
   devtool: 'eval-source-map',
   mode: process.env.NODE_ENV ,
   devServer: {
-    host: 'localhost',
-    port: 8080,
+    compress: true,
+    open: true,
     // enable HMR on the devServer
     hot: true,
     // fallback to root for other urls
@@ -30,7 +30,7 @@ module.exports = {
       publicPath: '/',
     },
 
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    // headers: { 'Access-Control-Allow-Origin': '*' },
     /**
      * proxy is required in order to make api calls to
      * express server while using hot-reload webpack server
@@ -38,18 +38,18 @@ module.exports = {
      * to localhost:3000/api/* (where our Express server is running)
      */
     proxy: {
-      '/signup/**': {
+      '/post/': {
         target: 'http://localhost:3000/',
         secure: false,
       },
-      '/user/**': {
+      '/user/': {
         target: 'http://localhost:3000/',
         secure: false,
       },
-      '/styles.css/**': {
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
+      // '/styles.css/**': {
+      //   target: 'http://localhost:3000/',
+      //   secure: false,
+      // },
     },
   },
   module: {
