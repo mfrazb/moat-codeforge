@@ -28,7 +28,7 @@ postController.createPost = async (req, res, next) => {
 // 
 postController.getPosts = async (req, res, next) => {
     try {
-        const getPostsQuery = `SELECT * FROM posts`;
+        const getPostsQuery = `SELECT *, users.username FROM posts LEFT JOIN users ON posts.user_id=users.id`;
         const allPosts = await db.query(getPostsQuery);
         res.locals.allPosts = allPosts.rows;
         return next();
