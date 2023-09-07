@@ -1,8 +1,9 @@
 cookieController = {};
 
 cookieController.setSSIDCookie =(req, res, next) => {
-    const userID = res.locals.userInfo.userID;
-    res.cookie('ssid', userID, {httpOnly:true});
+    const number = Math.floor(Math.random() * 100).toString(); 
+    const cookie = res.cookie('ssid', number, {httpOnly:true});
+    res.locals.token = number;
     return next()
 }
 

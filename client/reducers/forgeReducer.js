@@ -7,20 +7,19 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     //add more tabs at a later point as necessary
     currentPosts: [{ //need to add postID; needs to increment every time new one gets generated
-      title: 'Algos', 
-      content_Type: 'Article', 
-      poster: 'username',
-      link: 'url',
-      description: 'insert description here',
-      date: 0,//date goes here,
-      upvotes: 0  
+      title: '',
+      content_type: '',
+      poster: '',
+      link: '',
+      description: '',
+      date: ''
     }],
     curPosts: [],
     drawerOpen: true,
     filter: 'Popular',
     loggedIn: false,
     newPostWindow: false,
-    currentUser: {name: 'John Doe', id: 0},
+    currentUser: {name: 'John Doe', id: 1},
     currentPage: 'Algorithms',
 };
 
@@ -40,19 +39,13 @@ export const forgeSlice = createSlice({
   reducers: {
     CHANGE_FILTER: (state, action) => {//updates filter string to coordinate further organizing reducer
       state.filter = action.payload;
-      return state;
     },
+    // payload [{title, link}]
     RENDER_TEST: (state, action) => {
-      if (!action.payload) {
-        state.curPosts = []
-      } else {
-        // action.payload.forEach(post => {
-        //   state.curPosts.push({title: post.title, link: post.link})
-        // })
-        state.curPosts = action.payload;
-      };
-      return state;
+      // ? Does this remember the previous posts while additionally adding the new one
+      state.curPosts = action.payload;
     },
+    // * SKIP
     RENDER_POSTS: (state, action) => {//switch/case /fetch-> get array of objects -> use dispatcher to go through posts
       //assume that action.payload is going to be an array of objects
       //each object will have all of the properties of each post
@@ -72,43 +65,44 @@ export const forgeSlice = createSlice({
         }
     
     },
+    // * SKIP
     SET_USER: (state, action) => {
       const {username, userID} = action.payload;
       console.log(username, userID);
       state.currentUser.id = userID;
       state.currentUser.name = username;
       console.log(state.currentUser.id, state.currentUser.name);
-      return state;
     },
+    // * SKIP
     SET_PAGE: (state, action) => {
       state.currentPage = action.payload;
-      return state;
     },
+    // * SKIP
     TOGGLE_POST_WINDOW: (state, action) => {
       const curState = state.newPostWindow;
       state.newPostWindow = !curState;
-      return state;
     },
+    // * SKIP
     TOGGLE_DRAWER: (state, action) => {
       const curState = state.drawerOpen;
       state.drawerOpen = !curState;
-      return state;
     },
-    CREATE_POST: (state, action) => {
-      //type the function here
-      const { title, content_type, poster, link, description, date } = action.payload;
-      return {
-        ...state,
-        currentPost: {
-          title,
-          content_type,
-          poster,
-          link,
-          description,
-          date
-        }
-      };
-    },
+    // CREATE_POST: (state, action) => {
+    //   //type the function here
+    //   const { title, content_type, poster, link, description, date } = action.payload;
+    //   // state.currentPost = action.payload
+    //   return {
+    //     ...state,
+    //     currentPost: {
+    //       title,
+    //       content_type,
+    //       poster,
+    //       link,
+    //       description,
+    //       date
+    //     }
+    //   };
+    // },
     DELETE_POST: (state, action) => {
       return state;
     },

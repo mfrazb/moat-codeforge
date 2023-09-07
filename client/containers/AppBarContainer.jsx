@@ -1,5 +1,9 @@
 import React from 'react';
+
+// REACT HOOKS
 import { useDispatch, useSelector } from 'react-redux';
+
+// COMPONENTS
 import AppBar from '../components/AppBar.jsx';
 
 const AppBarContainer = props => {
@@ -15,7 +19,7 @@ const AppBarContainer = props => {
   // STATE HOOKS
   // const postWindow = useSelector(state => state.forge.newPostWindow);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // HANDLERS
   // open and close CREATE NEW POST window
