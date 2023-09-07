@@ -18,6 +18,7 @@ module.exports = {
   devServer: {
     host: 'localhost',
     port: 8080,
+    open: true,
     // enable HMR on the devServer
     hot: true,
     // fallback to root for other urls
@@ -38,7 +39,7 @@ module.exports = {
      * to localhost:3000/api/* (where our Express server is running)
      */
     proxy: {
-      '/signup/**': {
+      '/post/**': {
         target: 'http://localhost:3000/',
         secure: false,
       },

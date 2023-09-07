@@ -9,10 +9,14 @@ const UserRouter = require('./Routes/UserRouter');
 const PostRouter = require('./Routes/PostRouter');
 
 const sessionController = require('./Controllers/sessionController');
+const corsOptions = {
+    origin: true, //included origin as true
+    credentials: true, //included credentials as true
+};
 
 const PORT = process.env.PORT || 3000;
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
