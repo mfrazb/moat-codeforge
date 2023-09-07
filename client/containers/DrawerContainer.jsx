@@ -16,7 +16,7 @@ const DrawerContainer = props => {
   // SELECT CATEGORY - set posts to new category
   const selectPage = page => {
     if (page === curPage) return;
-    dispatch(RENDER_TEST());
+    // dispatch(RENDER_TEST());
     dispatch(SET_PAGE(page));
   };
 

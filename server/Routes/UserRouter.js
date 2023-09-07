@@ -16,7 +16,7 @@ router.post('/login', userController.verifyUser,
 })
 
 // adding return as best practice
-router.post('/signup', userController.uniqueInput, userController.createUser, 
+router.post('/signup', userController.createUser, 
     // cookieController.setSSIDCookie, sessionController.startSession, 
     (req, res) => {
     return res.status(200).json({message: 'User created successfully'});

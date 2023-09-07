@@ -5,31 +5,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    //add more tabs at a later point as necessary
-    currentPosts: [{ //need to add postID; needs to increment every time new one gets generated
+  //add more tabs at a later point as necessary
+  currentPosts: [
+    {
+      //need to add postID; needs to increment every time new one gets generated
       title: '',
       content_type: '',
       poster: '',
       link: '',
       description: '',
-      date: ''
-    }],
-    curPosts: [],
-    drawerOpen: true,
-    filter: 'Popular',
-    loggedIn: false,
-    newPostWindow: false,
-    currentUser: {name: 'John Doe', id: 1},
-    currentPage: 'Algorithms',
+      date: '',
+    },
+  ],
+  curPosts: [],
+  drawerOpen: true,
+  filter: 'Popular',
+  loggedIn: false,
+  newPostWindow: false,
+  currentUser: { name: 'John Doe', id: 1 },
+  currentPage: 'Algorithms',
 };
 
 //possibly move logic into database//for right now, creating array of objects specific to each topic
 //database: table for each tab ----| posts based on each topic
 
-
 //add actions (logistics) for each reducer method
 //inside each action, modify the portion of state that needs to be edited and return the state
-
 
 //logic for individual profiles initial state?
 
@@ -37,7 +38,8 @@ export const forgeSlice = createSlice({
   name: 'forge',
   initialState,
   reducers: {
-    CHANGE_FILTER: (state, action) => {//updates filter string to coordinate further organizing reducer
+    CHANGE_FILTER: (state, action) => {
+      //updates filter string to coordinate further organizing reducer
       state.filter = action.payload;
     },
     // payload [{title, link}]
@@ -46,28 +48,29 @@ export const forgeSlice = createSlice({
       state.curPosts = action.payload;
     },
     // * SKIP
-    RENDER_POSTS: (state, action) => {//switch/case /fetch-> get array of objects -> use dispatcher to go through posts
+    RENDER_POSTS: (state, action) => {
+      //switch/case /fetch-> get array of objects -> use dispatcher to go through posts
       //assume that action.payload is going to be an array of objects
       //each object will have all of the properties of each post
       //we will do the fetch request BEFORE calling the dispatcher, so we will have all the post info already
-  
-      const resp = 'Popular'
-        switch(resp) {
-          case 'Recent': for (const dateVal in action.payload) {
+
+      const resp = 'Popular';
+      switch (resp) {
+        case 'Recent':
+          for (const dateVal in action.payload) {
             console.log(Math.min(...dateVal));
           } //arrange results in order based off least greatest accumulated time
-            case 'Type': //database: ---| unit ---| type
-              console.log(action.type())
-            case 'Popular': for (const upvotes in action.payload) {
-              console.log(Math.max(...upvotes)); //arrange results in order based off highest number of upvotes (Math.max?)
-        
+        case 'Type': //database: ---| unit ---| type
+          console.log(action.type());
+        case 'Popular':
+          for (const upvotes in action.payload) {
+            console.log(Math.max(...upvotes)); //arrange results in order based off highest number of upvotes (Math.max?)
           }
-        }
-    
+      }
     },
     // * SKIP
     SET_USER: (state, action) => {
-      const {username, userID} = action.payload;
+      const { username, userID } = action.payload;
       console.log(username, userID);
       state.currentUser.id = userID;
       state.currentUser.name = username;
@@ -114,15 +117,22 @@ export const forgeSlice = createSlice({
     DELETE_PROFILE: (state, action) => {
       return state;
     },
-    default: () => {return state}
+    default: () => {
+      return state;
+    },
     //UPDATE_PROFILE
-  }
-})
-
-
+  },
+});
 
 //backend sends array of posts broken down by topic, then iterate through each topic array to find correct post
 
-export const {CHANGE_FILTER, TOGGLE_DRAWER, TOGGLE_POST_WINDOW, SET_PAGE, SET_USER, RENDER_TEST} = forgeSlice.actions;
+export const {
+  CHANGE_FILTER,
+  TOGGLE_DRAWER,
+  TOGGLE_POST_WINDOW,
+  SET_PAGE,
+  SET_USER,
+  RENDER_TEST,
+} = forgeSlice.actions;
 
 export default forgeSlice.reducer;

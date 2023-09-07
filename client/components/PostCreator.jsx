@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { TOGGLE_POST_WINDOW } from '../reducers/forgeReducer.js';
+// HOOKS
+import { useDispatch } from 'react-redux';
 // MUI COMPONENTS
 import {
   Box,
@@ -16,7 +19,7 @@ import postType from './../misc/postTypes.js';
 
 const PostCreator = props => {
   const { postWindow, handlePostWindow, curPage, curUser } = props;
-
+  const dispatch = useDispatch();
   const handleNewPost = async event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
