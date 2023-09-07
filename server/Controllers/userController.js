@@ -28,7 +28,6 @@ userController.createUser = async (req, res, next) => {
         VALUES ($1, $2, $3)
         RETURNING id;`
         const result = await db.query(insertUserQuery, params);
-        console.log(username, result.rows);
         res.locals.userId = await result.rows[0].id;
         return next();
     } catch(err) {
@@ -40,8 +39,7 @@ userController.createUser = async (req, res, next) => {
 }
 
 /**
- * @todo fix error handling for no user by still running bcrypt and not letting user know
- *       whether error was caused by username or password
+ * 
  * 
  * This middleware checks a users username and password from a POST request. If
  * the user is found, it stores the user_id on res.locals.userId and moves to next middleware.
@@ -66,7 +64,8 @@ userController.verifyUser = async (req, res, next) => {
         const databasePW = await db.query(verifyUserQuery, params);
 
         if(databasePW.rows.length < 1) {
-            return res.status(409).json({ message: 'User not found.'});
+            await bcrypt.compare(password, password);
+            return res.status(409).json({ message: 'Username or password incorrect.'});
         }
         const match = await bcrypt.compare(password, databasePW.rows[0].password);
         // res.locals.userInfo = {user: databasePW.rows}
