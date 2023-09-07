@@ -2,14 +2,16 @@ const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
-
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const UserRouter = require('./Routes/UserRouter');
 const PostRouter = require('./Routes/PostRouter');
 
-const PORT = process.env.PORT || 3000;
+const sessionController = require('./Controllers/sessionController');
 
+const PORT = process.env.PORT || 3000;
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 
@@ -19,7 +21,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 app.use('/user', UserRouter);
 
-app.use('/post', PostRouter);
+app.use('/post', sessionController.checkSession , PostRouter);
 
 app.use((req, res) => res.status(404).send('Oops! This is not the right page'));
 

@@ -53,7 +53,7 @@ userController.createUser = async (req, res, next) => {
  * @param {Function} next When invoked without an argument, moves to next middleware
  * @returns undefined | error object
  */
-userController.verifyUser = async (req, res, next) => {
+userController.verifyUser = async (req, res, next) => {    
     try {
         const { username, password } = req.body;
         const params = [username];

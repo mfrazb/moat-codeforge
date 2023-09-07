@@ -11,7 +11,7 @@ CREATE TABLE users (
 CREATE TABLE user_sessions (
     id SERIAL PRIMARY KEY,
     session_token TEXT NOT NULL UNIQUE,
-    users_id bigint NOT NULL UNIQUE REFERENCES users(id),
+    users_id bigint NOT NULL REFERENCES users(id),
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
