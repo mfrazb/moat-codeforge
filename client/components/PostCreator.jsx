@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
-
 // MUI COMPONENTS
 import {
   Box,
@@ -13,25 +11,42 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+// MISC
+import postType from './../misc/postTypes.js';
 
 const PostCreator = props => {
-  const { postWindow, handlePostWindow, handleNewPost } = props;
+  const { postWindow, handlePostWindow, curPage, curUser } = props;
 
-  // TO DO: move post types to misc folder
-  const postType = [
-    {
-      value: 'article',
-      label: 'Article',
-    },
-    {
-      value: 'video',
-      label: 'Video',
-    },
-    {
-      value: 'tutorial',
-      label: 'Tutorial',
-    },
-  ];
+  const handleNewPost = async event => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const title = data.get('title');
+    const description = data.get('description');
+    const link = data.get('link');
+    const contentType = data.get('content');
+    const request = {
+      title,
+      type: contentType,
+      category: curPage,
+      userId: curUser.id,
+      link,
+      description,
+    };
+    console.log(title, description, link, contentType);
+    const serverResponse = await fetch(
+      'http://localhost:3000/post/createpost',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request),
+      },
+    ).catch(err => {
+      console.log(err);
+    });
+    const parsedResponse = await serverResponse.json();
+    console.log(parsedResponse);
+    dispatch(TOGGLE_POST_WINDOW());
+  };
 
   return (
     <div>
