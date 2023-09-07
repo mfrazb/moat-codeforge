@@ -7,7 +7,7 @@ describe('userController', () => {
         let req;
         let res;
         let next;
-        beforeAll(() => {
+        beforeEach(() => {
             req = {body: {username: 'chad', password: 'pass1', email: 'testemail@gmail.com'}}
             res = {locals: {}};
             next = jest.fn();
@@ -34,7 +34,6 @@ describe('userController', () => {
             await userController.createUser(req, res, next);
             const resultPost = await pool.query(text, []);
             const rowsPostLength = await resultPost.rows.length;
-            expect(rowsPostLength).toEqual(rowsLength+1);
             expect(next.mock.calls[0][0]).toBeInstanceOf(Object);
             expect(rowsPostLength).toEqual(rowsLength);
         })
@@ -49,7 +48,7 @@ describe('userController', () => {
             await userController.createUser(req, res, next);
             const resultPost = await pool.query(text, []);
             const rowsPostLength = await resultPost.rows.length;
-            expect(rowsPostLength).toEqual(rowsLength+1);
+            
             expect(next.mock.calls[0][0]).toBeInstanceOf(Object);
             expect(rowsPostLength).toEqual(rowsLength);
         })
@@ -76,7 +75,7 @@ describe('userController', () => {
             req.body.username = username;
             req.body.password = password;
             await userController.verifyUser(req, res, next);
-            expect(res.locals.userId).toBe('4');
+            expect(res.locals.userId).toBe(4);
             expect(next.mock.calls[0][0]).toBe(undefined)
         })
 
