@@ -2,6 +2,7 @@ import React from 'react';
 // HOOKS
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 //REDUCERS
 import { SET_USER } from '../reducers/forgeReducer';
 // MUI STYLES
@@ -27,6 +28,19 @@ import LoginIcon from '@mui/icons-material/Login';
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  // useEffect(() => {
+  //   // Checks if user is signed in, if so automatically redirects
+  //   async function isSignedIn(){
+  //     const result = await fetch('/user/isloggedin');
+  //     const res = await result.json();
+  //     await console.log(res)
+  //     if (res.isLoggedIn) {
+  //       navigate('/main');
+  //     }
+  //   }
+  //   isSignedIn();
+  // },[])
 
   const handleSubmit = async event => {
     event.preventDefault();

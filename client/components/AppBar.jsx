@@ -35,7 +35,6 @@ export default function AppBarUsage(props) {
     toggleDrawer,
     handlePostWindow,
   } = props;
-  React.useEffect(() => console.log(curUser), [curUser])
   return (
     <AppBar
       position='absolute'

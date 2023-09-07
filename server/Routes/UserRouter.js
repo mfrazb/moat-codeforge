@@ -24,8 +24,13 @@ router.get('/currentuser', sessionController.checkSession, userController.getUse
     return res.status(200).json({isLoggedIn: true, 'data': res.locals.user});
 })
 
+router.get('/logout', cookieController.removeSSIDCookie, (req,res) => {
+    return res.status(200).json('Cleared Cookies!');
+})
 
-
+// router.get('/isloggedin', sessionController.isLoggedIn, (req, res) => {
+//     return res.status(200).json({isLoggedIn: false})
+// })
 
 
 module.exports = router;

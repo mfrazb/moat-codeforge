@@ -1,5 +1,6 @@
 import React from 'react';
 // HOOKS
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // MUI STYLES
 import CSSBaseline from '@mui/material/CssBaseline';
@@ -23,6 +24,19 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Signup = () => {
   const navigate = useNavigate();
+
+  // React.useEffect(() => {
+  //   // Checks if user is signed in, if so automatically redirects
+  //   async function isSignedIn(){
+  //     const result = await fetch('/user/isloggedin');
+  //     const res = await result.json();
+  //     await console.log(res)
+  //     if (res.isLoggedIn) {
+  //       navigate('/main');
+  //     }
+  //   }
+  //   isSignedIn();
+  // },[])
 
   const handleSubmit = async event => {
     event.preventDefault();

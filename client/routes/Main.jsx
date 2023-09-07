@@ -83,9 +83,10 @@ const main = () => {
   // MOVE TO DRAWER
   // LOGOUT -  redirect to login page
   // TO DO - address sessions in handler
-  const handleLogout = () => {
-    navigate('/');
-  };
+  // const handleLogout = async() => {
+  //   await fetch('/user/logout');
+  //   navigate('/');
+  // };
 
   return (
     <Box sx={{ display: 'flex' }}>

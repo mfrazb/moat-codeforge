@@ -22,7 +22,8 @@ const DrawerContainer = props => {
 
   // LOGOUT -  redirect to login page
   // TO DO - address sessions in handler
-  const handleLogout = () => {
+  const handleLogout = async() => {
+    await fetch('/user/logout');
     navigate('/');
   };
 

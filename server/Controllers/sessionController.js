@@ -6,24 +6,24 @@ sessionController = {};
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = async (req, res, next) => {
-  try{
-    const SSID = req.cookies.ssid;
-  console.log(SSID, req.cookies)
-  const text = 'SELECT id FROM user_sessions WHERE session_token=$1';
-  const response = await db.query(text, [SSID]);
-  //if there is no session verify user is needed!
-  // if there is a response, we can kind of bypass verify user
-  if (response.rows.length > 0) return res.status(200).json({redirect:true});
-  else next();
-  }  catch(err){
-    next({
-      log: `sessionController.isLoggedIn: Error ${err}`,
-      message: { err: 'Error occurred in sessionController.isLoggedIn'}
-  })
-  }
+// sessionController.isLoggedIn = async (req, res, next) => {
+//   try{
+//     const SSID = req.cookies.ssid;
+//   console.log(SSID, req.cookies)
+//   const text = 'SELECT id FROM user_sessions WHERE session_token=$1';
+//   const response = await db.query(text, [SSID]);
+//   //if there is no session verify user is needed!
+//   // if there is a response, we can kind of bypass verify user
+//   if (response.rows.length > 0) return res.status(301).json({isLoggedIn:true});
+//   else next();
+//   }  catch(err){
+//     next({
+//       log: `sessionController.isLoggedIn: Error ${err}`,
+//       message: { err: 'Error occurred in sessionController.isLoggedIn'}
+//   })
+//   }
 
-};
+// };
   
 /**
  * startSession - create and save a new Session into the database.
@@ -60,6 +60,7 @@ sessionController.checkSession = async(req, res, next) => {
     const ssid = req.cookies.ssid;
     const text = 'SELECT users_id FROM user_sessions WHERE session_token = $1';
     const response = await db.query(text, [ssid]);
+    await console.log( 'this is it', response.rows[0])
     if (response.rows.length) {
       res.locals.userId = response.rows[0].users_id;
       return next();
@@ -73,6 +74,7 @@ sessionController.checkSession = async(req, res, next) => {
      * 
      */
     else {
+      console.log('ran false')
       return res.status(301).json({'isLoggedIn': false});
     }
   } catch (err) {
