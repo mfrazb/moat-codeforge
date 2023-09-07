@@ -4,6 +4,7 @@ const express = require('express');
 
 const postController = {};
 
+// Takes post request properties and sets up postgres query
 postController.createPost = async (req, res, next) => {
     try {
         // deconstruction from req.body pulling the below properties
@@ -14,6 +15,7 @@ postController.createPost = async (req, res, next) => {
         const params = [userId, title, link, description, category, type];
         await db.query(createPostQuery, params);
         return next();
+    // if there is an error log and return string back to 
     } catch(err) {
         // if the parameters don't exist or there is an error 
         return next({
@@ -23,6 +25,7 @@ postController.createPost = async (req, res, next) => {
     }
 }
 
+// 
 postController.getPosts = async (req, res, next) => {
     try {
         const getPostsQuery = `SELECT * FROM posts`;

@@ -63,7 +63,7 @@ userController.verifyUser = async (req, res, next) => {
         }
         const match = await bcrypt.compare(password, databasePW.rows[0].password);
         // res.locals.userInfo = {user: databasePW.rows}
-        res.locals.userInfo = { username: databasePW.rows[0].username, userID: databasePW.rows[0].id }
+        res.locals.userInfo = { username: databasePW.rows[0].username, userID: databasePW.rows[0].id };
         if (match) {
             return next();
         } else {
