@@ -13,25 +13,25 @@ import AppBarContainer from '../containers/AppBarContainer.jsx';
 import DrawerContainer from '../containers/DrawerContainer.jsx';
 import PostContainer from '../components/PostContainer';
 // COMPONENTS
-// import Drawer from '../components/Drawer.jsx';
+import Drawer from '../components/Drawer.jsx';
 import PostCreator from '../components/PostCreator.jsx';
 
 // DRAWER subcomponents
-// import Toolbar from '@mui/material/Toolbar';
-// import IconButton from '@mui/material/IconButton';
-// import Button from '@mui/material/Button';
-// import List from '@mui/material/List';
-// import Typography from '@mui/material/Typography';
-// import Divider from '@mui/material/Divider';
-// import ListItemButton from '@mui/material/ListItemButton';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-// import FunctionsIcon from '@mui/icons-material/Functions';
-// import ConstructionIcon from '@mui/icons-material/Construction';
-// import GridOnIcon from '@mui/icons-material/GridOn';
-// import FilterVintageIcon from '@mui/icons-material/FilterVintage';
-// import LogoutIcon from '@mui/icons-material/Logout';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import FunctionsIcon from '@mui/icons-material/Functions';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import GridOnIcon from '@mui/icons-material/GridOn';
+import FilterVintageIcon from '@mui/icons-material/FilterVintage';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const main = () => {
   const drawerWidth = 360;
@@ -54,6 +54,21 @@ const main = () => {
     dispatch(TOGGLE_DRAWER());
   };
 
+  // MOVE TO DRAWER
+  // SELECT CATEGORY - set posts to new category
+  const selectPage = page => {
+    if (page === curPage) return;
+    // dispatch(RENDER_TEST());
+    dispatch(SET_PAGE(page));
+  };
+
+  // MOVE TO DRAWER
+  // LOGOUT -  redirect to login page
+  // TO DO - address sessions in handler
+  const handleLogout = () => {
+    navigate('/');
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -72,7 +87,7 @@ const main = () => {
         curPage={curPage}
         toggleDrawer={toggleDrawer}
       />
-      {/*<Drawer
+      {/* <Drawer
         variant='permanent'
         drawerOpen={drawerOpen}
         drawerWidth={drawerWidth}>
@@ -145,7 +160,8 @@ const main = () => {
             <ListItemText primary='Log Out' onClick={handleLogout} />
           </ListItemButton>
         </List>
-      </Drawer> */}
+      </Drawer>*/}
+
       <Box
         component='main'
         sx={{

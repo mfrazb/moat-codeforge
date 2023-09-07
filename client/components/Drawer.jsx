@@ -13,6 +13,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+
 // MUI ICONS
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ConstructionIcon from '@mui/icons-material/Construction';
@@ -23,8 +24,8 @@ import FunctionsIcon from '@mui/icons-material/Functions';
 
 // DRAWER STYLES dependent on state - theme, drawerOpen, drawerWidth
 const DrawerCF = styled(Drawer, {
-  shouldForwardProp: prop => prop !== 'drawerOpen',
-})(({ theme, drawerOpen, drawerWidth }) => ({
+  shouldForwardProp: prop => prop !== 'open',
+})(({ theme, open, drawerWidth }) => ({
   '& .muiDrawer-paper': {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -34,7 +35,7 @@ const DrawerCF = styled(Drawer, {
       duration: theme.transitions.duration.enteringScreen,
     }),
     boxSizing: 'border-box',
-    ...(!drawerOpen && {
+    ...(!open && {
       overflowX: 'hidden',
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -59,8 +60,10 @@ export default function DrawerUsage(props) {
     handleLogout,
   } = props;
 
+  console.log('drawerWidth:', drawerWidth);
+
   return (
-    <Drawer variant='permanent' open={drawerOpen} drawerWidth={drawerWidth}>
+    <Drawer variant='permanent' open={drawerOpen}>
       <Toolbar
         sx={{
           display: 'flex',
@@ -74,7 +77,7 @@ export default function DrawerUsage(props) {
       </Toolbar>
       <Divider />
       <Typography component='h1' variant='h3' textAlign='center' sx={{ mt: 5 }}>
-        {`Welcome`}
+        {`Welcome,`}
       </Typography>
       <Typography component='h1' variant='h3' textAlign='center'>
         {`${curUser.name}`}
