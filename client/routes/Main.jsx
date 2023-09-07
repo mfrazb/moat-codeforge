@@ -8,15 +8,19 @@ import { styled } from '@mui/material/styles';
 
 // Import containers
 import AppBarContainer from '../containers/AppBarContainer.jsx';
+import DrawerContainer from '../containers/DrawerContainer.jsx';
+import PostContainer from '../components/PostContainer';
+
 // Import components
 import AppBar from '../components/AppBar.jsx';
-import Drawer from '../containers/DrawerContainer.jsx';
+import Drawer from '../components/Drawer.jsx';
+import PostCreator from '../components/PostCreator.jsx';
 
 // App Bar subcomponents
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 
 // shared subcomponents
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 
 import MuiDrawer from '@mui/material/Drawer';
@@ -59,7 +63,6 @@ import {
   RENDER_TEST,
 } from '../reducers/forgeReducer';
 import { useNavigate } from 'react-router-dom';
-import PostContainer from '../components/PostContainer';
 
 const main = () => {
   const drawerWidth = 360;
@@ -164,7 +167,10 @@ const main = () => {
         handlePostWindow={handlePostWindow}
       />
       {/* side bar - break into another component */}
-      <Drawer variant='permanent' open={drawerOpen} drawerWidth={drawerWidth}>
+      <Drawer
+        variant='permanent'
+        drawerOpen={drawerOpen}
+        drawerWidth={drawerWidth}>
         <Toolbar
           sx={{
             display: 'flex',
@@ -249,7 +255,6 @@ const main = () => {
         <Container maxWidth='lg' sx={{ mt: 10, mb: 4 }}>
           <Box sx={{ minWidth: 120 }}>
             <div>
-              {/* CREATE NEW POST - make dialog into separate component , move state/handler functions as needed, need to allow user to not add https AND to specify category */}
               <Dialog open={postWindow} onClose={handlePostWindow}>
                 <DialogTitle>Create New Post</DialogTitle>
                 <DialogContent>
@@ -320,6 +325,12 @@ const main = () => {
                 </DialogContent>
               </Dialog>
             </div>
+            {/*<PostCreator
+              postWindow={postWindow}
+              handlePostWindow={handlePostWindow}
+              handleNewPost={handleNewPost}
+            />
+          */}
             <PostContainer />
           </Box>
         </Container>

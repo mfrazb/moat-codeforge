@@ -15,6 +15,7 @@ import {
 
 const PostCreator = props => {
   const { postWindow, handlePostWindow, handleNewPost } = props;
+
   const postType = [
     {
       value: 'article',
