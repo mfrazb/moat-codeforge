@@ -19,7 +19,7 @@ const initialState = {
     filter: 'Popular',
     loggedIn: false,
     newPostWindow: false,
-    currentUser: {name: '', id: 1},
+    currentUser: {name: 'John Doe', id: 1},
     currentPage: 'Algorithms',
 };
 
