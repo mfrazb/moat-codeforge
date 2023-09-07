@@ -41,7 +41,7 @@ const Signup = () => {
     const parsedResponse = await serverResponse.json();
     console.log(parsedResponse);
     if (serverResponse.status === 200) {
-      return navigate('/');
+      return navigate('/main');
     } else {
       console.log('show an error');
     }

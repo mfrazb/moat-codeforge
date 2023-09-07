@@ -20,6 +20,9 @@ router.post('/signup', userController.createUser, cookieController.setSSIDCookie
     return res.status(200).json({redirect:true});
 })
 
+router.get('/currentuser', sessionController.checkSession, userController.getUsername, (req, res) =>{
+    return res.status(200).json({isLoggedIn: true, 'data': res.locals.user});
+})
 
 
 

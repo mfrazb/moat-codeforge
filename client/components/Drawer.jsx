@@ -63,7 +63,7 @@ export default function DrawerUsage(props) {
   console.log('drawerWidth:', drawerWidth);
 
   return (
-    <Drawer variant='permanent' open={drawerOpen}>
+    <Drawer variant='persistent' open={drawerOpen}>
       <Toolbar
         sx={{
           display: 'flex',
@@ -80,7 +80,7 @@ export default function DrawerUsage(props) {
         {`Welcome,`}
       </Typography>
       <Typography component='h1' variant='h3' textAlign='center'>
-        {`${curUser.name}`}
+        {`${curUser.username}`}
       </Typography>
       <List
         component='nav'

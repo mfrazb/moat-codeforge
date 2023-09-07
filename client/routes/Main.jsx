@@ -1,8 +1,10 @@
 import * as React from 'react';
 // HOOKS
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 // REDUCERS
-import { TOGGLE_DRAWER, TOGGLE_POST_WINDOW } from '../reducers/forgeReducer';
+import { SET_USER, TOGGLE_DRAWER, TOGGLE_POST_WINDOW } from '../reducers/forgeReducer';
 // MUI STYLES
 import CssBaseline from '@mui/material/CssBaseline';
 // MUI COMPONENTS
@@ -37,13 +39,29 @@ const main = () => {
   const drawerWidth = 360;
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    /**
+     * Fetch userinfo when page loads
+     */
+    async function getCurrentUser(){
+      const result = await fetch('/user/currentuser')
+      const info = await result.json();
+      if (info.isLoggedIn) {
+        // set dispatch userdata
+  
+        dispatch(SET_USER({'username':info.data.username}))
+      } else {
+        navigate('/');
+      }
+    }
+    getCurrentUser();
+  },[])
   // STATE
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
   const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
-
   // open and close CREATE NEW POST window
   const handlePostWindow = () => {
     dispatch(TOGGLE_POST_WINDOW());

@@ -6,23 +6,23 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   //add more tabs at a later point as necessary
-  currentPosts: [
-    {
-      //need to add postID; needs to increment every time new one gets generated
-      title: '',
-      content_type: '',
-      poster: '',
-      link: '',
-      description: '',
-      date: '',
-    },
-  ],
+  // currentPosts: [
+  //   {
+  //     //need to add postID; needs to increment every time new one gets generated
+  //     title: '',
+  //     content_type: '',
+  //     poster: '',
+  //     link: '',
+  //     description: '',
+  //     date: '',
+  //   },
+  // ],
   curPosts: [],
-  drawerOpen: true,
+  drawerOpen: false,
   filter: 'Popular',
   loggedIn: false,
   newPostWindow: false,
-  currentUser: { name: 'John Doe', id: 1 },
+  currentUser: { username: ' ' },
   currentPage: 'Algorithms',
 };
 
@@ -70,11 +70,9 @@ export const forgeSlice = createSlice({
     },
     // * SKIP
     SET_USER: (state, action) => {
-      const { username, userID } = action.payload;
-      console.log(username, userID);
-      state.currentUser.id = userID;
-      state.currentUser.name = username;
-      console.log(state.currentUser.id, state.currentUser.name);
+      console.log('reducer', action.payload);
+      const { username } = action.payload;
+      state.currentUser.username = username;
     },
     // * SKIP
     SET_PAGE: (state, action) => {

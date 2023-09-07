@@ -83,4 +83,28 @@ userController.verifyUser = async (req, res, next) => {
     }
 }
 
+/**
+ * Gets the user info from a logged in users Id
+ * @param {Integer} res.locals.userId
+ * @returns
+ * @param {Object} res.locals.user
+ * @param {String} res.locals.user.username
+ */
+userController.getUsername = async (req, res, next) =>{
+    try { 
+    const query = 'SELECT username FROM users WHERE id=$1'
+    const params = [res.locals.userId];
+    
+   const dbquery = await db.query(query, params);
+   res.locals.user = dbquery.rows[0];
+   return next();
+    } catch (err) {
+        return next({
+            log: `userController.getUsername Error ${err}`,
+            message: { err: 'Error occurred in userController.getUsername'}
+        });
+    }
+}
+
+
 module.exports = userController;

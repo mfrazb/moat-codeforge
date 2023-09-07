@@ -35,7 +35,7 @@ export default function AppBarUsage(props) {
     toggleDrawer,
     handlePostWindow,
   } = props;
-
+  React.useEffect(() => console.log(curUser), [curUser])
   return (
     <AppBar
       position='absolute'
@@ -66,7 +66,7 @@ export default function AppBarUsage(props) {
           color='inherit'
           noWrap
           sx={{ flexGrow: 1, ml: 2 }}>
-          {curUser.name}
+          {curUser.username}
         </Typography>
         <Typography component='h1' variant='h5' sx={{ flexGrow: 1 }}>
           {curPage}

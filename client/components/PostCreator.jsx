@@ -18,7 +18,7 @@ import {
 import postType from './../misc/postTypes.js';
 
 const PostCreator = props => {
-  const { postWindow, handlePostWindow, curPage, curUser } = props;
+  const { postWindow, handlePostWindow, curPage } = props;
   const dispatch = useDispatch();
   const handleNewPost = async event => {
     event.preventDefault();
@@ -31,7 +31,6 @@ const PostCreator = props => {
       title,
       type: contentType,
       category: curPage,
-      userId: curUser.id,
       link,
       description,
     };
