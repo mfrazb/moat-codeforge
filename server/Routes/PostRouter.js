@@ -12,7 +12,6 @@ router.post('/createpost', postController.createPost, (req, res) => {
 
 router.get('/getposts', postController.getPosts, (req, res) => {
     return res.status(200).json({'isLoggedIn': true, 'data': res.locals.allPosts})
-
 })
 
 // add return statement as best practice

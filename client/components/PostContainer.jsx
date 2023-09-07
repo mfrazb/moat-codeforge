@@ -25,20 +25,19 @@ const PostContainer = () => {
   };
   console.log('newPostWindow = ', newPostWindow);
   const getPostData = async () => {
-    const serverResponse = await fetch(
-      'http://localhost:3000/post/getposts',
+    const serverResponse = await fetch('/post/getposts',
     ).catch(err => {
       console.log(err);
     });
     const parsedResponse = await serverResponse.json();
-    const filteredResponse = parsedResponse.filter((post) => post.category === curPage);
+    const filteredResponse = parsedResponse.data.filter((post) => post.category === curPage);
     filteredResponse.sort(filterSortingDefs[filter]);
     console.log(filteredResponse);
     dispatch(RENDER_TEST(filteredResponse));
   };
   const handleThumbsUp = async event => {
     console.log(event.target.value);
-    const serverResponse = await fetch('http://localhost:3000/post/vote', {
+    const serverResponse = await fetch('/post/vote', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ vote: 'up', link: event.target.value }),
@@ -49,7 +48,7 @@ const PostContainer = () => {
   };
   const handleThumbsDown = async event => {
     console.log(event.target.value);
-    const serverResponse = await fetch('http://localhost:3000/post/vote', {
+    const serverResponse = await fetch('/post/vote', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ vote: 'down', link: event.target.value }),
