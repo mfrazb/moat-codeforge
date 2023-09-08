@@ -1,27 +1,35 @@
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
-const cors = require('cors');
-
+// const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const UserRouter = require('./Routes/UserRouter');
 const PostRouter = require('./Routes/PostRouter');
 
-const PORT = process.env.PORT || 3000;
+const sessionController = require('./Controllers/sessionController');
+// const corsOptions = {
+//     origin: true, //included origin as true
+//     credentials: true, //included credentials as true
+// };
 
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+app.use(cookieParser());
+// app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, '../dist')));
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 app.use('/user', UserRouter);
 
-app.use('/post', PostRouter);
+app.use('/post', sessionController.checkSession , PostRouter);
 
-app.use((req, res) => res.status(404).send('Oops! This is not the right page'));
+// app.use((req, res) => res.status(404).send('Oops! This is not the right page'));
 
 app.use((err, req, res, next) =>{
     const defaultError = {

@@ -4,14 +4,20 @@ const express = require('express');
 
 const postController = {};
 
+// Takes post request properties and sets up postgres query
 postController.createPost = async (req, res, next) => {
     try {
-        const { title, type, category, userId, link, description } = req.body;
+        // deconstruction from req.body pulling the below properties
+        const { title, type, category, link, description } = req.body;
+        // creating a variable to use for the postgres DB query
         const createPostQuery = `INSERT INTO posts (user_id, title, link, description, category, type) VALUES ($1, $2, $3, $4, $5, $6);`;
-        const params = [userId, title, link, description, category, type];
-        db.query(createPostQuery, params);
+        // db.query method pulls below parameters from DB and inserts them into posts
+        const params = [res.locals.userId, title, link, description, category, type];
+        await db.query(createPostQuery, params);
         return next();
+    // if there is an error log and return string back to 
     } catch(err) {
+        // if the parameters don't exist or there is an error 
         return next({
             log: `postController.createPost: Error ${err}`,
             message: { err: 'Error occurred in postController.createPost'}
@@ -19,12 +25,11 @@ postController.createPost = async (req, res, next) => {
     }
 }
 
+// 
 postController.getPosts = async (req, res, next) => {
     try {
-        const { category } = req.body;
-        const getPostsQuery = `SELECT * FROM posts WHERE category = $1;`;
-        const params = [category];
-        const allPosts = await db.query(getPostsQuery, params);
+        const getPostsQuery = `SELECT *, users.username FROM posts LEFT JOIN users ON posts.user_id=users.id`;
+        const allPosts = await db.query(getPostsQuery);
         res.locals.allPosts = allPosts.rows;
         return next();
     } catch (err) {
