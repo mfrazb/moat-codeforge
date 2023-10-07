@@ -17,11 +17,11 @@ const config = {
 
 // Add properties to config depending on NODE_ENV value
 if(process.env.NODE_ENV === 'development') {
-  config.user = 'ydpwqckz';
-  config.database = 'ydpwqckz';
-  config.password = 'zfIxtEVDAxWvTo8tdJs63HaotaoCU1g4';
-  config.host = 'peanut.db.elephantsql.com';
-  config.port = 5432;
+  config.user = process.env.DEV_USER;
+  config.database = process.env.DEV_DATABASE;
+  config.password = process.env.DEV_PASSWORD;
+  config.host = process.env.DEV_HOST;
+  config.port = process.env.DEV_PORT;
 } else if (process.env.NODE_ENV === 'production') {
   config.user = process.env.RDS_USERNAME;
   config.database = process.env.RDS_DB_NAME;
