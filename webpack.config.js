@@ -9,6 +9,7 @@ module.exports = {
     './client/index.js',
   ],
   output: {
+    // change to /dist instead of dist
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     filename: 'bundle.js',
@@ -25,6 +26,7 @@ module.exports = {
 
     static: {
       // match the output path
+      // change to /dist instead of dist
       directory: path.resolve(__dirname, 'dist'),
       // match the output 'publicPath'
       publicPath: '/',
@@ -39,15 +41,15 @@ module.exports = {
      */
     proxy: {
       '/post/': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:4000/',
         secure: false,
       },
       '/user/': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:4000/',
         secure: false,
       },
       // '/styles.css/**': {
-      //   target: 'http://localhost:3000/',
+      //   target: 'http://localhost:4000/',
       //   secure: false,
       // },
     },

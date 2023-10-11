@@ -60,8 +60,6 @@ export default function DrawerUsage(props) {
     handleLogout,
   } = props;
 
-  console.log('drawerWidth:', drawerWidth);
-
   return (
     <Drawer variant='persistent' open={drawerOpen}>
       <Toolbar

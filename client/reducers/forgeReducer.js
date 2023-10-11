@@ -70,7 +70,7 @@ export const forgeSlice = createSlice({
     },
     // * SKIP
     SET_USER: (state, action) => {
-      console.log('reducer', action.payload);
+      console.log('reducer: SET_USER', action.payload);
       const { username } = action.payload;
       state.currentUser.username = username;
     },

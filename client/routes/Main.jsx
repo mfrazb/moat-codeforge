@@ -2,9 +2,12 @@ import * as React from 'react';
 // HOOKS
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 // REDUCERS
-import { SET_USER, TOGGLE_DRAWER, TOGGLE_POST_WINDOW } from '../reducers/forgeReducer';
+import {
+  SET_USER,
+  TOGGLE_DRAWER,
+  TOGGLE_POST_WINDOW,
+} from '../reducers/forgeReducer';
 // MUI STYLES
 import CssBaseline from '@mui/material/CssBaseline';
 // MUI COMPONENTS
@@ -15,25 +18,7 @@ import AppBarContainer from '../containers/AppBarContainer.jsx';
 import DrawerContainer from '../containers/DrawerContainer.jsx';
 import PostContainer from '../components/PostContainer';
 // COMPONENTS
-import Drawer from '../components/Drawer.jsx';
 import PostCreator from '../components/PostCreator.jsx';
-
-// DRAWER subcomponents
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import FunctionsIcon from '@mui/icons-material/Functions';
-import ConstructionIcon from '@mui/icons-material/Construction';
-import GridOnIcon from '@mui/icons-material/GridOn';
-import FilterVintageIcon from '@mui/icons-material/FilterVintage';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 const main = () => {
   const drawerWidth = 360;
@@ -44,24 +29,25 @@ const main = () => {
     /**
      * Fetch userinfo when page loads
      */
-    async function getCurrentUser(){
-      const result = await fetch('/user/currentuser')
+    async function getCurrentUser() {
+      const result = await fetch('/user/currentuser');
       const info = await result.json();
       if (info.isLoggedIn) {
         // set dispatch userdata
-  
-        dispatch(SET_USER({'username':info.data.username}))
+        dispatch(SET_USER({ username: info.data.username }));
+        console.log('setting_user:', info.data);
       } else {
         navigate('/');
       }
     }
     getCurrentUser();
-  },[])
+  }, []);
   // STATE
   const curUser = useSelector(state => state.forge.currentUser);
   const curPage = useSelector(state => state.forge.currentPage);
   const postWindow = useSelector(state => state.forge.newPostWindow);
   const drawerOpen = useSelector(state => state.forge.drawerOpen);
+
   // open and close CREATE NEW POST window
   const handlePostWindow = () => {
     dispatch(TOGGLE_POST_WINDOW());
@@ -76,17 +62,8 @@ const main = () => {
   // SELECT CATEGORY - set posts to new category
   const selectPage = page => {
     if (page === curPage) return;
-    // dispatch(RENDER_TEST());
     dispatch(SET_PAGE(page));
   };
-
-  // MOVE TO DRAWER
-  // LOGOUT -  redirect to login page
-  // TO DO - address sessions in handler
-  // const handleLogout = async() => {
-  //   await fetch('/user/logout');
-  //   navigate('/');
-  // };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -106,81 +83,6 @@ const main = () => {
         curPage={curPage}
         toggleDrawer={toggleDrawer}
       />
-      {/* <Drawer
-        variant='permanent'
-        drawerOpen={drawerOpen}
-        drawerWidth={drawerWidth}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
-          }}>
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </Toolbar>
-        <Divider />
-        <Typography
-          component='h1'
-          variant='h3'
-          textAlign='center'
-          sx={{ mt: 5 }}>
-          {`Welcome`}
-        </Typography>
-        <Typography component='h1' variant='h3' textAlign='center'>
-          {`${curUser.name}`}
-        </Typography>
-        <List
-          component='nav'
-          sx={{
-            pl: 4,
-            mt: 5,
-            height: 1,
-            justifyContent: 'start',
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
-          <ListItemButton
-            onClick={() => newPage('Algorithms')}
-            sx={{ maxHeight: 75 }}>
-            <ListItemIcon>
-              <FunctionsIcon />
-            </ListItemIcon>
-            <ListItemText primary='Algorithms' />
-          </ListItemButton>
-          <ListItemButton
-            onClick={() => newPage('React')}
-            sx={{ maxHeight: 75 }}>
-            <ListItemIcon>
-              <FilterVintageIcon />
-            </ListItemIcon>
-            <ListItemText primary='React' />
-          </ListItemButton>
-          <ListItemButton
-            onClick={() => newPage('Redux')}
-            sx={{ maxHeight: 75 }}>
-            <ListItemIcon>
-              <GridOnIcon />
-            </ListItemIcon>
-            <ListItemText primary='Redux' />
-          </ListItemButton>
-          <ListItemButton sx={{ maxHeight: 75 }}>
-            <ListItemIcon>
-              <ConstructionIcon />
-            </ListItemIcon>
-            <ListItemText primary='More to come...' />
-          </ListItemButton>
-          <ListItemButton sx={{ maxHeight: 75, marginTop: 'auto' }}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary='Log Out' onClick={handleLogout} />
-          </ListItemButton>
-        </List>
-      </Drawer>*/}
-
       <Box
         component='main'
         sx={{
